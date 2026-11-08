@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-3XLsKDEMttbpb96G2/P314/B/foeObHyUTLtRMF9n6s='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-/OEDj3N2vtKP5it/GHYkbXew7352Ox2x+AWH8MIxmes='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -86,17 +86,25 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 </section>
 
 <section>
- <h2 data-t="s3">3. Handtekening</h2>
- <p class="status" style="margin-top:0" data-t="handUitleg">Kopieer je handtekening in Outlook (bv. uit een verzonden mail of het handtekeningvenster) en plak ze hier. Kleur, vet en links blijven behouden. De browser onthoudt ze.</p>
- <p class="tip" data-t="handGroet">Let op: de slotgroet (bv. "Met vriendelijke groeten,") staat al in de mailtekst. Plak hier dus enkel je naam en gegevens, zonder slotgroet.</p>
- <div class="hand" id="hand" contenteditable="true" data-leeg="Plak hier je handtekening" data-t-leeg="handLeeg"></div>
- <div class="status" id="handinfo"></div>
+ <h2 data-t="s3">3. Bijlagen (optioneel)</h2>
+ <input type="file" id="bestanden" multiple>
+ <div id="bijlagenlijst" class="status"></div>
 </section>
 
 <section>
- <h2 data-t="s4">4. Bijlagen (optioneel)</h2>
- <input type="file" id="bestanden" multiple>
- <div id="bijlagenlijst" class="status"></div>
+ <h2 data-t="s4">4. Handtekening</h2>
+ <p class="tip" data-t="handGroet">Let op: de slotgroet (bv. "Met vriendelijke groeten,") staat al in de mailtekst. Plak hier dus enkel je naam en gegevens, zonder slotgroet.</p>
+ <!-- Zonder bijlagen (mail-link): gewone tekst -->
+ <div id="handTekstBlok">
+  <p class="status" data-t="handTekstUitleg">Typ of plak je handtekening als gewone tekst: een mail die meteen in Outlook opent, kent geen opmaak. De browser onthoudt ze.</p>
+  <textarea id="verkoper" rows="5" data-t-ph="handPh" placeholder="Jonathan&#10;Customer Service&#10;+32 ..."></textarea>
+ </div>
+ <!-- Met bijlagen (.eml): handtekening met opmaak -->
+ <div id="handOpmaakBlok" hidden>
+  <p class="status">Kopieer je handtekening in Outlook (bv. uit een verzonden mail of het handtekeningvenster) en plak ze hier. Kleur, vet en links blijven behouden. De browser onthoudt ze.</p>
+  <div class="hand" id="hand" contenteditable="true" data-leeg="Plak hier je handtekening" data-t-leeg="handLeeg"></div>
+ </div>
+ <div class="status" id="handinfo"></div>
  <button id="maak" data-t="maak">Mails klaarzetten</button>
 </section>
 
@@ -168,15 +176,17 @@ const TEKST = {
   "uitleg": "Plak klanten en producten uit Excel en kies een reden. Voor elke klant staat een mail klaar in zijn eigen taal. Zonder bijlagen opent de mail meteen in Outlook; met bijlagen maakt de tool automatisch een Outlook-bestand (.eml).",
   "plakPh": "Klantnr | Klantnaam | Productcode | Productnaam",
   "s2": "2. Klanten, producten en reden",
-  "s3": "3. Handtekening",
+  "s3": "3. Bijlagen (optioneel)",
   "handUitleg": "Kopieer je handtekening in Outlook (bv. uit een verzonden mail of het handtekeningvenster) en plak ze hier. Kleur, vet en links blijven behouden. De browser onthoudt ze.",
   "handGroet": "Let op: de slotgroet (bv. \"Met vriendelijke groeten,\") staat al in de mailtekst. Plak hier dus enkel je naam en gegevens, zonder slotgroet.",
   "handLeeg": "Plak hier je handtekening",
-  "s4": "4. Bijlagen (optioneel)",
+  "s4": "4. Handtekening",
+  "handTekstUitleg": "Typ of plak je handtekening als gewone tekst: een mail die meteen in Outlook opent, kent geen opmaak. De browser onthoudt ze.",
+  "handPh": "Jonathan\nCustomer Service\n+32 ...",
+  "handModusEml": "Je hebt bijlagen gekozen: de mails worden Outlook-bestanden (.eml). Plak hier je handtekening met opmaak.",
   "geenBijlagen": "Geen bijlagen: elke mail opent meteen in Outlook (gewone tekst). Voeg je bijlagen toe, dan maakt de tool automatisch Outlook-bestanden (.eml) met opmaak en bijlagen.",
   "modusEml": "Met bijlagen: per klant een Outlook-bestand (.eml) met opmaak, handtekening en alle bijlagen.",
   "openOutlook": "Openen in Outlook",
-  "alsEml": "Met opmaak (.eml)",
   "teLang": "Te lang voor een gewone mail-link: deze mail wordt een Outlook-bestand (.eml).",
   "verwijderen": "Verwijderen",
   "teGroot": "Samen {grootte}: veel mailservers weigeren mails boven 10 à 20 MB. Overweeg een link naar het bestand in plaats van een bijlage.",
@@ -235,15 +245,17 @@ const TEKST = {
   "uitleg": "Paste customers and products from Excel and choose a reason. An email is ready for each customer in their own language. Without attachments the email opens straight in Outlook; with attachments the tool automatically creates an Outlook file (.eml).",
   "plakPh": "Customer no. | Customer name | Product code | Product name",
   "s2": "2. Customers, products and reason",
-  "s3": "3. Signature",
+  "s3": "3. Attachments (optional)",
   "handUitleg": "Copy your signature in Outlook (e.g. from a sent email or the signature window) and paste it here. Colours, bold and links are kept. The browser remembers it.",
   "handGroet": "Note: the closing (e.g. \"Kind regards,\") is already in the email text. So only paste your name and details here, without a closing.",
   "handLeeg": "Paste your signature here",
-  "s4": "4. Attachments (optional)",
+  "s4": "4. Signature",
+  "handTekstUitleg": "Type or paste your signature as plain text: an email that opens straight in Outlook has no formatting. The browser remembers it.",
+  "handPh": "Jonathan\nCustomer Service\n+32 ...",
+  "handModusEml": "You chose attachments: the emails become Outlook files (.eml). Paste your formatted signature here.",
   "geenBijlagen": "No attachments: each email opens straight in Outlook (plain text). Add attachments and the tool automatically creates Outlook files (.eml) with formatting and attachments.",
   "modusEml": "With attachments: an Outlook file (.eml) per customer, with formatting, signature and all attachments.",
   "openOutlook": "Open in Outlook",
-  "alsEml": "With formatting (.eml)",
   "teLang": "Too long for a normal mail link: this email becomes an Outlook file (.eml).",
   "verwijderen": "Remove",
   "teGroot": "Total {grootte}: many mail servers reject emails over 10 to 20 MB. Consider a link to the file instead of an attachment.",
@@ -302,15 +314,17 @@ const TEKST = {
   "uitleg": "Collez les clients et produits depuis Excel et choisissez un motif. Un e-mail est prêt pour chaque client dans sa langue. Sans pièce jointe, l'e-mail s'ouvre directement dans Outlook ; avec pièces jointes, l'outil crée automatiquement un fichier Outlook (.eml).",
   "plakPh": "N° client | Nom du client | Code produit | Nom du produit",
   "s2": "2. Clients, produits et motif",
-  "s3": "3. Signature",
+  "s3": "3. Pièces jointes (facultatif)",
   "handUitleg": "Copiez votre signature dans Outlook (p. ex. depuis un e-mail envoyé ou la fenêtre des signatures) et collez-la ici. Couleurs, gras et liens sont conservés. Le navigateur la retient.",
   "handGroet": "Attention : la formule de politesse (p. ex. « Bien cordialement, ») figure déjà dans le texte du mail. Collez donc ici uniquement votre nom et vos coordonnées, sans formule de politesse.",
   "handLeeg": "Collez ici votre signature",
-  "s4": "4. Pièces jointes (facultatif)",
+  "s4": "4. Signature",
+  "handTekstUitleg": "Tapez ou collez votre signature en texte simple : un e-mail qui s'ouvre directement dans Outlook n'a pas de mise en forme. Le navigateur la retient.",
+  "handPh": "Jonathan\nCustomer Service\n+32 ...",
+  "handModusEml": "Vous avez choisi des pièces jointes : les e-mails deviennent des fichiers Outlook (.eml). Collez ici votre signature avec mise en forme.",
   "geenBijlagen": "Aucune pièce jointe : chaque e-mail s'ouvre directement dans Outlook (texte simple). Ajoutez des pièces jointes et l'outil crée automatiquement des fichiers Outlook (.eml) avec mise en forme et pièces jointes.",
   "modusEml": "Avec pièces jointes : un fichier Outlook (.eml) par client, avec mise en forme, signature et toutes les pièces jointes.",
   "openOutlook": "Ouvrir dans Outlook",
-  "alsEml": "Avec mise en forme (.eml)",
   "teLang": "Trop long pour un lien e-mail normal : cet e-mail devient un fichier Outlook (.eml).",
   "verwijderen": "Supprimer",
   "teGroot": "Total {grootte} : beaucoup de serveurs refusent les e-mails de plus de 10 à 20 Mo. Envisagez un lien vers le fichier plutôt qu'une pièce jointe.",
@@ -620,10 +634,7 @@ function schoon(html) {
 }
 [$("hand")].forEach(el => {
   const sleutel = HAND;
-  try {
-    const oud = localStorage.getItem("mailsjablonen_handtekening") || "";   // gewone tekst van de vroegere mailto-pagina
-    el.innerHTML = schoon(localStorage.getItem(sleutel) || localStorage.getItem(HAND + "_NL") || esc(oud).replace(/\r?\n/g, "<br>"));
-  }
+  try { el.innerHTML = schoon(localStorage.getItem(sleutel) || localStorage.getItem(HAND + "_NL") || ""); }
   catch (err) { console.warn("Handtekening kon niet gelezen worden:", err); }
   const bewaar = () => { if (!el.textContent.trim() && !el.querySelector("img")) el.innerHTML = ""; try { localStorage.setItem(sleutel, el.innerHTML); $("handinfo").textContent = ""; }
     catch (err) { console.error("Handtekening onthouden mislukt:", err); $("handinfo").innerHTML = foutHtml([T("handNiet")]); } };
@@ -649,13 +660,39 @@ function schoon(html) {
   el.addEventListener("drop", e => e.preventDefault());          // slepen niet toegelaten, enkel plakken
   el.addEventListener("blur", () => { el.innerHTML = schoon(el.innerHTML); bewaar(); });
 });
-function handtekening() { return schoon($("hand").innerHTML); }   // altijd opnieuw gefilterd vóór gebruik
-/* Dezelfde handtekening als gewone tekst (voor een mailto-link: die kent geen opmaak) */
-function handtekeningTekst() {
-  const w = new DOMParser().parseFromString("<div>" + handtekening() + "</div>", "text/html").body.firstChild;
+/* Twee handtekeningen, elk apart onthouden:
+   - gewone tekst (vak #verkoper) voor een mail-link zonder bijlagen
+   - met opmaak (vak #hand) voor een Outlook-bestand (.eml) met bijlagen
+   Is de ene leeg, dan wordt de andere gebruikt. */
+const HAND_TEKST = "mailsjablonen_handtekening";
+try { $("verkoper").value = localStorage.getItem(HAND_TEKST) || ""; }
+catch (err) { console.warn("Handtekening (tekst) kon niet gelezen worden:", err); }
+$("verkoper").addEventListener("input", () => {
+  try { localStorage.setItem(HAND_TEKST, $("verkoper").value); $("handinfo").textContent = ""; }
+  catch (err) { console.error("Handtekening (tekst) onthouden mislukt:", err); $("handinfo").innerHTML = foutHtml([T("handNiet")]); }
+});
+/* Opgemaakte handtekening als gewone tekst */
+function naarTekst(html) {
+  const w = new DOMParser().parseFromString("<div>" + html + "</div>", "text/html").body.firstChild;
   w.querySelectorAll("br").forEach(b => b.replaceWith("\n"));
   w.querySelectorAll("p,div,tr,li,h1,h2,h3,h4,h5,h6").forEach(b => b.before("\n"));   // elk blok op een nieuwe regel
   return w.textContent.replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+/* Voor .eml: opgemaakte handtekening (altijd opnieuw gefilterd), anders de gewone tekst */
+function handtekening() {
+  const h = schoon($("hand").innerHTML);
+  return h || esc($("verkoper").value.trim()).replace(/\r?\n/g, "<br>");
+}
+/* Voor de mail-link: gewone tekst, anders de opgemaakte omgezet naar tekst */
+function handtekeningTekst() {
+  return $("verkoper").value.replace(/\s+$/, "") || naarTekst(schoon($("hand").innerHTML));
+}
+/* Bijlagen gekozen? Dan het vak met opmaak tonen, anders het vak met gewone tekst */
+function syncHand() {
+  const eml = bijlagen.length > 0;
+  $("handTekstBlok").hidden = eml;
+  $("handOpmaakBlok").hidden = !eml;
+  $("handOpmaakBlok").querySelector(".status").textContent = eml ? T("handModusEml") + " " + T("handUitleg") : T("handUitleg");
 }
 
 /* ---------- Bijlagen ---------- */
@@ -669,6 +706,7 @@ function toonBijlagen() {
       + `<div class="tip">${esc(T("modusEml"))}</div>`
       + (tot > 10*1048576 ? foutHtml([T("teGroot", { grootte: kb(tot) })]) : "")
     : esc(T("geenBijlagen"));
+  syncHand();
 }
 $("bestanden").addEventListener("change", e => {
   [...e.target.files].forEach(f => {
@@ -766,7 +804,7 @@ $("maak").addEventListener("click", () => {
       else { mailto += 1; klaar[i].tekst = platte; }
     }
     const knoppen = link
-      ? `<a class="knop" href="${esc(link)}">${esc(T("openOutlook"))}</a> <button class="licht" data-eml="${i}">${esc(T("alsEml"))}</button>`
+      ? `<a class="knop" href="${esc(link)}">${esc(T("openOutlook"))}</a>`
       : `<button data-eml="${i}">${esc(T("openEml"))}</button>`;
     const inhoud = link ? `<pre class="inhoud">${esc(klaar[i].tekst)}</pre>` : `<div class="inhoud">${body}</div>`;
     html += `<div class="mail"><div class="kop">${esc(T("aan"))} <b>${esc(k.contact)}</b>, ${esc(bedrijf)} &lt;${esc(naar.join("; "))}&gt; <span class="taal">${esc(k.taal)}</span></div>
