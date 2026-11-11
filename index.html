@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-OjA28rc1r77o0WraI5L5/5duqBuvZ/vWxqgtr7gXlsU='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-bJspb5d24LY172BttBAaqMQF/YEE39tTOZ93gLCEAh8='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -50,6 +50,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  .modus{display:flex;flex-wrap:wrap;gap:6px}
  .modus button{margin:0;background:#fff;color:#2F5D8A}
  .modus button[aria-pressed="true"]{background:#2F5D8A;color:#fff}
+ .editor{border:2px solid #2F5D8A}
  .pj{font-size:.88rem;color:#5B6B73;margin-top:8px}
  .talen{float:right;display:flex;gap:4px;margin-top:4px}
  .talen button{margin:0;padding:4px 10px;font-size:.85rem;background:#fff;color:#2F5D8A}
@@ -64,10 +65,35 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 
 <section>
  <h2 data-t="s1">1. Bestanden laden</h2>
- <p class="status" data-t="s1Uitleg">Kies je contactenbestand en het tekstenbestand. Je mag ze samen selecteren (Ctrl ingedrukt houden). Krijg je nieuwe teksten? Laad dan alleen het nieuwe tekstenbestand: je contacten blijven bewaard.</p>
+ <p class="status" data-t="s1Uitleg">Kies je contactenbestand. De teksten zitten al in het formulier. Heb je een nieuw tekstenbestand (Excel) gekregen? Laad het hier ook: je contacten blijven bewaard.</p>
  <input type="file" id="excel" accept=".xlsx" multiple>
  <div class="status" id="status"></div>
+ <button class="licht" id="aanpassen" data-t="knopAanpassen">✏️ Teksten aanpassen</button>
+ <button class="licht" id="downloadTeksten" data-t="knopDownload">⬇️ Teksten downloaden (Excel)</button>
  <button class="licht" id="wis" data-t="wis">Opgeslagen bestanden vergeten</button>
+</section>
+
+<section id="editor" class="editor" hidden>
+ <h2 data-t="edTitel">✏️ Teksten aanpassen</h2>
+ <p class="status" data-t="edUitleg"></p>
+ <label for="edKeuze" data-t="reden">Reden</label>
+ <select id="edKeuze"></select>
+ <label for="edCode" data-t="edCode">Code van de reden</label><input id="edCode" maxlength="100">
+ <label for="edNaamNL"></label><input id="edNaamNL" maxlength="100">
+ <label for="edNaamFR"></label><input id="edNaamFR" maxlength="100">
+ <label for="edNaamEN"></label><input id="edNaamEN" maxlength="100">
+ <label for="edOnderwerpNL"></label><input id="edOnderwerpNL" maxlength="300">
+ <label for="edTekstNL"></label><textarea id="edTekstNL" rows="9"></textarea>
+ <label for="edOnderwerpFR"></label><input id="edOnderwerpFR" maxlength="300">
+ <label for="edTekstFR"></label><textarea id="edTekstFR" rows="9"></textarea>
+ <label for="edOnderwerpEN"></label><input id="edOnderwerpEN" maxlength="300">
+ <label for="edTekstEN"></label><textarea id="edTekstEN" rows="9"></textarea>
+ <label for="edVersie" data-t="edVersie">Versie</label><input id="edVersie" maxlength="40">
+ <div id="edInfo" class="status"></div>
+ <button id="edBewaar" data-t="edBewaar">Opslaan</button>
+ <button class="licht" id="edWeg" data-t="edWeg">Reden verwijderen</button>
+ <button class="licht" id="edStandaard" data-t="edStandaard">Terug naar standaardteksten</button>
+ <button class="licht" id="edSluit" data-t="edSluit">Sluiten</button>
 </section>
 
 <section>
@@ -125,6 +151,200 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  <div id="resultaten" class="status">Hier verschijnen de mails.</div>
 </section>
 
+<!-- Ingebouwde standaardteksten (uit texts.xlsx). Alleen gegevens, geen code: dit blok wordt nooit uitgevoerd. -->
+<script type="application/json" id="standaard">
+{
+"versie": "2026-11.3",
+"teksten": [
+{
+"reden": "New contact person",
+"taal": "NL",
+"onderwerp": "Nieuwe contactpersoon voor uw account",
+"tekst": "Beste {contact},\n\nHierbij laten wij u weten dat Daniel onze firma helaas heeft verlaten. Vanaf nu neem ik zijn verantwoordelijkheden voor uw account over.\nZelf heb ik meer dan 10 jaar ervaring als Key Account Manager bij Univar. Aarzel dan ook niet om mij te contacteren bij vragen of opmerkingen.\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "New contact person",
+"taal": "FR",
+"onderwerp": "Nouvel interlocuteur pour votre compte",
+"tekst": "Cher/Chère {contact},\n\nNous tenons à vous informer que Daniel a malheureusement quitté notre entreprise. Je reprends désormais la gestion de votre compte.\nFort de plus de 10 ans d'expérience en tant que Key Account Manager chez Univar, je reste à votre entière disposition pour toute question ou remarque.\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "New contact person",
+"taal": "EN",
+"onderwerp": "New contact person for your account",
+"tekst": "Dear {contact},\n\nWe would like to inform you that Daniel has unfortunately left our company. I will be taking over his responsibilities for your account.\nI have over 10 years of experience as a Key Account Manager at Univar, so please do not hesitate to contact me should you have any questions or comments.\n\nKind regards,\n{sender}"
+},
+{
+"reden": "Price on request",
+"taal": "NL",
+"onderwerp": "Prijs op aanvraag met onmiddellijke ingang",
+"tekst": "Beste {contact},\n\nHierbij laten wij u weten dat de prijs van {het volgende product|de volgende producten} met onmiddellijke ingang enkel nog op aanvraag beschikbaar is:\n\n{producten}\n\nIndien u interesse heeft, bezorgen wij u graag een offerte.\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "Price on request",
+"taal": "FR",
+"onderwerp": "Prix sur demande avec effet immédiat",
+"tekst": "Cher/Chère {contact},\n\nNous vous informons qu'à compter de ce jour, {le prix du produit suivant est disponible|les prix des produits suivants sont disponibles} uniquement sur demande :\n\n{produits}\n\nSi vous êtes intéressé(e), nous serons heureux de vous transmettre un devis.\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "Price on request",
+"taal": "EN",
+"onderwerp": "Price on request, effective immediately",
+"tekst": "Dear {contact},\n\nPlease be advised that, effective immediately, the price of the following {product|products} is only available upon request:\n\n{products}\n\nShould you be interested, we would be happy to provide you with a quote.\n\nKind regards,\n{sender}"
+},
+{
+"reden": "Price increase",
+"taal": "NL",
+"onderwerp": "Prijsaanpassing met onmiddellijke ingang",
+"tekst": "Beste {contact},\n\nHelaas moeten wij u laten weten dat de prijs van {het volgende product|de volgende producten} met onmiddellijke ingang verhoogd wordt:\n\n{producten}\n\nU vindt {de nieuwe prijs|de nieuwe prijzen} in bijlage.\nAarzel niet om mij te contacteren bij vragen.\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "Price increase",
+"taal": "FR",
+"onderwerp": "Adaptation de prix avec effet immédiat",
+"tekst": "Cher/Chère {contact},\n\nNous sommes au regret de vous informer que {le prix du produit suivant augmente|les prix des produits suivants augmentent} avec effet immédiat :\n\n{produits}\n\nVous trouverez {le nouveau prix|les nouveaux prix} en pièce jointe.\nN'hésitez pas à me contacter pour toute question.\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "Price increase",
+"taal": "EN",
+"onderwerp": "Price adjustment effective immediately",
+"tekst": "Dear {contact},\n\nWe regret to inform you that the price of the following {product|products} will increase, effective immediately:\n\n{products}\n\nPlease find the new {price|prices} attached.\nDo not hesitate to contact me should you have any questions.\n\nKind regards,\n{sender}"
+},
+{
+"reden": "Price decrease",
+"taal": "NL",
+"onderwerp": "Lagere prijs met onmiddellijke ingang",
+"tekst": "Beste {contact},\n\nGoed nieuws: de prijs van {het volgende product|de volgende producten} daalt met onmiddellijke ingang:\n\n{producten}\n\nU vindt {de nieuwe prijs|de nieuwe prijzen} in bijlage.\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "Price decrease",
+"taal": "FR",
+"onderwerp": "Baisse de prix avec effet immédiat",
+"tekst": "Cher/Chère {contact},\n\nBonne nouvelle : {le prix du produit suivant baisse|les prix des produits suivants baissent} avec effet immédiat :\n\n{produits}\n\nVous trouverez {le nouveau prix|les nouveaux prix} en pièce jointe.\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "Price decrease",
+"taal": "EN",
+"onderwerp": "Lower price effective immediately",
+"tekst": "Dear {contact},\n\nGood news: the price of the following {product|products} will decrease, effective immediately:\n\n{products}\n\nPlease find the new {price|prices} attached.\n\nKind regards,\n{sender}"
+},
+{
+"reden": "Excess stock - clearance sale",
+"taal": "NL",
+"onderwerp": "Speciaal aanbod: extra stock beschikbaar",
+"tekst": "Beste {contact},\n\nVan {het volgende product|de volgende producten} hebben wij momenteel extra stock:\n\n{producten}\n\nWe bieden {dit product|deze producten} graag aan tegen een scherpe prijs. Laat u mij weten welke hoeveelheid u interesseert en tegen welke prijs u zou willen kopen?\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "Excess stock - clearance sale",
+"taal": "FR",
+"onderwerp": "Offre spéciale : stock supplémentaire disponible",
+"tekst": "Cher/Chère {contact},\n\nNous disposons actuellement d'un stock supplémentaire {du produit suivant|des produits suivants} :\n\n{produits}\n\nNous vous {le|les} proposons volontiers à un prix avantageux. Pourriez-vous m'indiquer la quantité qui vous intéresse et à quel prix vous souhaiteriez acheter ?\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "Excess stock - clearance sale",
+"taal": "EN",
+"onderwerp": "Special offer: extra stock available",
+"tekst": "Dear {contact},\n\nWe currently have extra stock of the following {product|products}:\n\n{products}\n\nWe would be happy to offer {it|them} at an attractive price. Could you let me know which quantity interests you and at what price you would like to buy?\n\nKind regards,\n{sender}"
+},
+{
+"reden": "Specification change",
+"taal": "NL",
+"onderwerp": "Wijziging productspecificatie",
+"tekst": "Beste {contact},\n\nHierbij laten wij u weten dat de specificatie van {het volgende product|de volgende producten} wijzigt:\n\n{producten}\n\nDe nieuwe {specificatiefiche|specificatiefiches} bezorg ik u graag.\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "Specification change",
+"taal": "FR",
+"onderwerp": "Modification de la spécification produit",
+"tekst": "Cher/Chère {contact},\n\nNous vous informons que la spécification {du produit suivant|des produits suivants} est modifiée :\n\n{produits}\n\nJe vous transmets volontiers {la nouvelle fiche|les nouvelles fiches} de spécification.\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "Specification change",
+"taal": "EN",
+"onderwerp": "Change in product specification",
+"tekst": "Dear {contact},\n\nWe would like to inform you that the specification of the following {product|products} is changing:\n\n{products}\n\nI will gladly send you the new specification {sheet|sheets}.\n\nKind regards,\n{sender}"
+},
+{
+"reden": "Packaging change",
+"taal": "NL",
+"onderwerp": "Wijziging verpakking",
+"tekst": "Beste {contact},\n\nHierbij laten wij u weten dat de verpakking van {het volgende product|de volgende producten} wijzigt:\n\n{producten}\n\nDe details van de nieuwe verpakking bezorg ik u graag.\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "Packaging change",
+"taal": "FR",
+"onderwerp": "Modification de l'emballage",
+"tekst": "Cher/Chère {contact},\n\nNous vous informons que l'emballage {du produit suivant|des produits suivants} est modifié :\n\n{produits}\n\nJe vous transmets volontiers les détails du nouvel emballage.\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "Packaging change",
+"taal": "EN",
+"onderwerp": "Change in packaging",
+"tekst": "Dear {contact},\n\nWe would like to inform you that the packaging of the following {product|products} is changing:\n\n{products}\n\nI will gladly send you the details of the new packaging.\n\nKind regards,\n{sender}"
+},
+{
+"reden": "Propose alternative product",
+"taal": "NL",
+"onderwerp": "Voorstel {alternatief product|alternatieve producten}",
+"tekst": "Beste {contact},\n\nOmwille van een rationalisatie van ons gamma willen wij u graag {een alternatief|alternatieven} voorstellen voor {het onderstaande product dat|de onderstaande producten die} wij u momenteel leveren:\n\n{producten}\n\nIn bijlage vindt u de bijhorende documenten.\nZullen wij u een staal of een offerte bezorgen?\n\nMet vriendelijke groeten,\n{verzender}"
+},
+{
+"reden": "Propose alternative product",
+"taal": "FR",
+"onderwerp": "Proposition {de produit alternatif|de produits alternatifs}",
+"tekst": "Cher/Chère {contact},\n\nDans le cadre d'une rationalisation de notre gamme, nous souhaitons vous proposer {une alternative au produit mentionné|des alternatives aux produits mentionnés} ci-dessous, que nous vous fournissons actuellement :\n\n{produits}\n\nVous trouverez les documents correspondants en pièce jointe.\nSouhaitez-vous que nous vous transmettions un échantillon ou un devis ?\n\nBien cordialement,\n{expéditeur}"
+},
+{
+"reden": "Propose alternative product",
+"taal": "EN",
+"onderwerp": "Alternative {product|products} proposal",
+"tekst": "Dear {contact},\n\nAs part of a rationalisation of our product range, we would like to propose {an alternative for the product|alternatives for the products} listed below, which we currently supply to you:\n\n{products}\n\nPlease find the relevant documents attached.\nWould you like us to provide a sample or a quote?\n\nKind regards,\n{sender}"
+}
+],
+"redenNamen": {
+"New contact person": {
+"nl": "Nieuwe contactpersoon",
+"fr": "Nouvel interlocuteur",
+"en": ""
+},
+"Price on request": {
+"nl": "Prijs op aanvraag",
+"fr": "Prix sur demande",
+"en": ""
+},
+"Price increase": {
+"nl": "Prijsverhoging",
+"fr": "Augmentation de prix",
+"en": ""
+},
+"Price decrease": {
+"nl": "Prijsverlaging",
+"fr": "Baisse de prix",
+"en": ""
+},
+"Excess stock - clearance sale": {
+"nl": "Te veel stock - uitverkoop",
+"fr": "Surstock - liquidation",
+"en": ""
+},
+"Specification change": {
+"nl": "Wijziging specificatie",
+"fr": "Modification de spécification",
+"en": ""
+},
+"Packaging change": {
+"nl": "Wijziging verpakking",
+"fr": "Modification d'emballage",
+"en": ""
+},
+"Propose alternative product": {
+"nl": "Alternatief product voorstellen",
+"fr": "Proposer un produit alternatif",
+"en": ""
+}
+}
+}
+</script>
 <script>
 const OPSLAG = "mailsjablonen_excel";            // dezelfde Excel als de eerste pagina
 const HAND = "mailsjablonen_handtekening_html";
@@ -139,7 +359,31 @@ const $ = id => document.getElementById(id);
 const TEKST = {
  "nl": {
   "s1": "1. Bestanden laden",
-  "s1Uitleg": "Kies je contactenbestand en het tekstenbestand. Je mag ze samen selecteren (Ctrl ingedrukt houden). Krijg je nieuwe teksten? Laad dan alleen het nieuwe tekstenbestand: je contacten blijven bewaard.",
+  "s1Uitleg": "Kies je contactenbestand. De teksten zitten al in het formulier. Heb je een nieuw tekstenbestand (Excel) gekregen? Laad het hier ook: je contacten blijven bewaard.",
+  "bronIngebouwd": "standaardteksten van dit formulier",
+  "bronAangepast": "aangepast in dit formulier",
+  "nieuwereStandaard": "Dit formulier heeft nieuwere standaardteksten (versie {v}).",
+  "gebruikStandaard": "Standaardteksten gebruiken",
+  "knopAanpassen": "✏️ Teksten aanpassen",
+  "knopDownload": "⬇️ Teksten downloaden (Excel)",
+  "edTitel": "✏️ Teksten aanpassen",
+  "edUitleg": "Kies een reden, pas onderwerp en tekst aan en klik op Opslaan. Codes: {contact}, {bedrijf}, {producten}, {verzender}, Cher/Chère en {enkelvoud|meervoud}. Je wijzigingen worden onthouden in deze browser. Wil je ze delen? Verhoog de versie, klik op \"Teksten downloaden (Excel)\" en stuur het bestand door.",
+  "edNieuw": "➕ Nieuwe reden",
+  "edCode": "Code van de reden (kolom Reason in Excel, bv. Price increase)",
+  "edNaam": "Naam in de keuzelijst ({taal})",
+  "edVersie": "Versie (verhoog dit als je de teksten doorstuurt)",
+  "edBewaar": "Opslaan",
+  "edWeg": "Reden verwijderen",
+  "edStandaard": "Terug naar standaardteksten",
+  "edSluit": "Sluiten",
+  "edGeenCode": "Vul de code van de reden in.",
+  "edDubbel": "Er bestaat al een reden met code \"{code}\".",
+  "edOnvolledig": "{taal}: vul zowel het onderwerp als de tekst in (of laat beide leeg).",
+  "edLeeg": "Vul minstens één taal in (onderwerp en tekst).",
+  "edOpgeslagen": "Opgeslagen.",
+  "edWegVraag": "Reden \"{naam}\" verwijderen?",
+  "edStandaardVraag": "Al je aangepaste teksten vervangen door de standaardteksten van dit formulier?",
+  "edMinstensEen": "Je kunt de laatste reden niet verwijderen.",
   "wis": "Opgeslagen bestanden vergeten",
   "plakLabel": "Plak hier je regels uit Excel",
   "plakInfo": "Vier kolommen per regel: klantnr, klantnaam, productcode, productnaam. Een kopregel mag mee.",
@@ -213,7 +457,31 @@ const TEKST = {
  },
  "en": {
   "s1": "1. Load files",
-  "s1Uitleg": "Choose your contacts file and the texts file. You can select both at once (hold Ctrl). Received new texts? Then load only the new texts file: your contacts are kept.",
+  "s1Uitleg": "Choose your contacts file. The texts are already built into the form. Received a new texts file (Excel)? Load it here too: your contacts are kept.",
+  "bronIngebouwd": "standard texts of this form",
+  "bronAangepast": "edited in this form",
+  "nieuwereStandaard": "This form has newer standard texts (version {v}).",
+  "gebruikStandaard": "Use standard texts",
+  "knopAanpassen": "✏️ Edit texts",
+  "knopDownload": "⬇️ Download texts (Excel)",
+  "edTitel": "✏️ Edit texts",
+  "edUitleg": "Choose a reason, edit subject and text and click Save. Codes: {contact}, {company}, {products}, {sender}, Cher/Chère and {singular|plural}. Your changes are remembered in this browser. Want to share them? Increase the version, click \"Download texts (Excel)\" and send the file.",
+  "edNieuw": "➕ New reason",
+  "edCode": "Reason code (column Reason in Excel, e.g. Price increase)",
+  "edNaam": "Name in the list ({taal})",
+  "edVersie": "Version (increase it when you send out the texts)",
+  "edBewaar": "Save",
+  "edWeg": "Delete reason",
+  "edStandaard": "Back to standard texts",
+  "edSluit": "Close",
+  "edGeenCode": "Fill in the reason code.",
+  "edDubbel": "A reason with code \"{code}\" already exists.",
+  "edOnvolledig": "{taal}: fill in both subject and text (or leave both empty).",
+  "edLeeg": "Fill in at least one language (subject and text).",
+  "edOpgeslagen": "Saved.",
+  "edWegVraag": "Delete reason \"{naam}\"?",
+  "edStandaardVraag": "Replace all your edited texts with the standard texts of this form?",
+  "edMinstensEen": "You cannot delete the last reason.",
   "wis": "Forget saved files",
   "plakLabel": "Paste your rows from Excel here",
   "plakInfo": "Four columns per row: customer no., customer name, product code, product name. A header row is allowed.",
@@ -287,7 +555,31 @@ const TEKST = {
  },
  "fr": {
   "s1": "1. Charger les fichiers",
-  "s1Uitleg": "Choisissez votre fichier de contacts et le fichier de textes. Vous pouvez les sélectionner ensemble (maintenez Ctrl enfoncé). Vous avez reçu de nouveaux textes ? Chargez alors uniquement le nouveau fichier de textes : vos contacts sont conservés.",
+  "s1Uitleg": "Choisissez votre fichier de contacts. Les textes sont déjà intégrés au formulaire. Vous avez reçu un nouveau fichier de textes (Excel) ? Chargez-le ici aussi : vos contacts sont conservés.",
+  "bronIngebouwd": "textes standard de ce formulaire",
+  "bronAangepast": "modifiés dans ce formulaire",
+  "nieuwereStandaard": "Ce formulaire contient des textes standard plus récents (version {v}).",
+  "gebruikStandaard": "Utiliser les textes standard",
+  "knopAanpassen": "✏️ Modifier les textes",
+  "knopDownload": "⬇️ Télécharger les textes (Excel)",
+  "edTitel": "✏️ Modifier les textes",
+  "edUitleg": "Choisissez un motif, modifiez l'objet et le texte, puis cliquez sur Enregistrer. Codes : {contact}, {entreprise}, {produits}, {expéditeur}, Cher/Chère et {singulier|pluriel}. Vos modifications sont retenues dans ce navigateur. Pour les partager : augmentez la version, cliquez sur « Télécharger les textes (Excel) » et envoyez le fichier.",
+  "edNieuw": "➕ Nouveau motif",
+  "edCode": "Code du motif (colonne Reason dans Excel, p. ex. Price increase)",
+  "edNaam": "Nom dans la liste ({taal})",
+  "edVersie": "Version (augmentez-la quand vous envoyez les textes)",
+  "edBewaar": "Enregistrer",
+  "edWeg": "Supprimer le motif",
+  "edStandaard": "Revenir aux textes standard",
+  "edSluit": "Fermer",
+  "edGeenCode": "Indiquez le code du motif.",
+  "edDubbel": "Un motif avec le code « {code} » existe déjà.",
+  "edOnvolledig": "{taal} : remplissez l'objet et le texte (ou laissez les deux vides).",
+  "edLeeg": "Remplissez au moins une langue (objet et texte).",
+  "edOpgeslagen": "Enregistré.",
+  "edWegVraag": "Supprimer le motif « {naam} » ?",
+  "edStandaardVraag": "Remplacer tous vos textes modifiés par les textes standard de ce formulaire ?",
+  "edMinstensEen": "Vous ne pouvez pas supprimer le dernier motif.",
   "wis": "Oublier les fichiers enregistrés",
   "plakLabel": "Collez ici vos lignes depuis Excel",
   "plakInfo": "Quatre colonnes par ligne : n° client, nom du client, code produit, nom du produit. Une ligne d'en-tête est autorisée.",
@@ -381,6 +673,9 @@ function vertaal() {
   TALEN.forEach(x => {
     document.querySelector(`label[for="eigenOnderwerp${x}"]`).textContent = T("eigenOnderwerp", { taal: T("taal" + x) });
     document.querySelector(`label[for="eigenTekst${x}"]`).textContent = T("eigenTekst", { taal: T("taal" + x) });
+    document.querySelector(`label[for="edNaam${x}"]`).textContent = T("edNaam", { taal: T("taal" + x) });
+    document.querySelector(`label[for="edOnderwerp${x}"]`).textContent = T("eigenOnderwerp", { taal: T("taal" + x) });
+    document.querySelector(`label[for="edTekst${x}"]`).textContent = T("eigenTekst", { taal: T("taal" + x) });
   });
   document.querySelectorAll("[data-taal]").forEach(k => k.setAttribute("aria-pressed", String(k.dataset.taal === taal)));
 }
@@ -505,21 +800,52 @@ function toon() {
     ? `<span class="ok">${esc(T("contactenOk", { bestand: data.bestandContacten }))}</span> ${esc(T("aantalContacten", { n: data.contacten.length }))}`
     : esc(T("contactenNiet"));
   const tekstRegel = data.teksten.length
-    ? `<span class="ok">${esc(T("tekstenOk", { bestand: data.bestandTeksten }))}</span>` + (data.versie ? " " + esc(T("versie", { v: data.versie })) : "") + " " + esc(T("aantalRedenen", { n: redenen.length }))
+    ? `<span class="ok">${esc(T("tekstenOk", { bestand: bron(data.bestandTeksten) }))}</span>` + (data.versie ? " " + esc(T("versie", { v: data.versie })) : "") + " " + esc(T("aantalRedenen", { n: redenen.length }))
     : esc(T("tekstenNiet"));
-  $("status").innerHTML = contactRegel + "<br>" + tekstRegel;
+  // Teksten uit een Excel of zelf aangepast, maar het formulier heeft nieuwere standaardteksten? Melden.
+  const nieuwer = data.bestandTeksten !== INGEBOUWD && STANDAARD.versie &&
+    STANDAARD.versie.localeCompare(data.versie || "", undefined, { numeric: true }) > 0;
+  $("status").innerHTML = contactRegel + "<br>" + tekstRegel
+    + (nieuwer ? `<div class="tip">${esc(T("nieuwereStandaard", { v: STANDAARD.versie }))} <button class="licht klein" id="naarStandaard">${esc(T("gebruikStandaard"))}</button></div>` : "");
 }
 
-/* Opgeslagen bestanden lezen. De oude vorm (één Excel met beide tabbladen, sleutel "bestand") wordt ook herkend. */
+/* ---------- Ingebouwde standaardteksten ----------
+   Staan in het blok <script type="application/json" id="standaard"> bovenaan.
+   Bron van de teksten (data.bestandTeksten): INGEBOUWD, AANGEPAST of de naam van een geladen Excel. */
+const INGEBOUWD = "__ingebouwd__", AANGEPAST = "__aangepast__";
+const STANDAARD = (() => {
+  try {
+    const s = JSON.parse($("standaard").textContent);
+    if (!Array.isArray(s.teksten)) throw new Error("geen lijst met teksten");
+    return { versie: String(s.versie || ""), teksten: s.teksten, redenNamen: Object.assign(Object.create(null), s.redenNamen) };
+  } catch (err) { console.error("Ingebouwde teksten konden niet gelezen worden:", err); return { versie: "", teksten: [], redenNamen: Object.create(null) }; }
+})();
+function zetStandaard(d) {
+  d.teksten = STANDAARD.teksten.map(t => ({ ...t }));
+  d.redenNamen = Object.assign(Object.create(null), structuredClone(STANDAARD.redenNamen));
+  d.versie = STANDAARD.versie; d.bestandTeksten = INGEBOUWD;
+  return d;
+}
+const bron = b => b === INGEBOUWD ? T("bronIngebouwd") : b === AANGEPAST ? T("bronAangepast") : b;
+/* Huidige stand onthouden. Geeft false terug als de browser niets mag bewaren. */
+function bewaarData() {
+  try { localStorage.setItem(OPSLAG, JSON.stringify(data)); return true; }
+  catch (err) { console.error("Onthouden mislukt:", err); return false; }
+}
+
+/* Opgeslagen bestanden lezen. De oude vorm (één Excel met beide tabbladen, sleutel "bestand") wordt ook herkend.
+   Geen teksten, of de standaardteksten? Dan altijd de standaardteksten van dit formulier (die kunnen nieuwer zijn). */
 function leesOpslag() {
+  let d = leeg();
   try {
     const o = JSON.parse(localStorage.getItem(OPSLAG));
     if (o && Array.isArray(o.contacten) && Array.isArray(o.teksten)) {
       const { bestand, ...rest } = o;
-      return { ...leeg(), bestandContacten: bestand || "", bestandTeksten: bestand || "", ...rest };
+      d = { ...leeg(), bestandContacten: bestand || "", bestandTeksten: bestand || "", ...rest };
     }
   } catch (err) { console.warn("Opgeslagen bestanden konden niet gelezen worden:", err); }
-  return leeg();
+  if (!d.teksten.length || d.bestandTeksten === INGEBOUWD) zetStandaard(d);
+  return d;
 }
 
 /* Eén Excel-bestand lezen. Het bestand mag tabblad Contacts, tabblad Texts of allebei bevatten.
@@ -607,7 +933,14 @@ $("excel").addEventListener("change", async e => {
 /* Andere pagina (bv. de bijlagenversie) heeft bestanden geladen of vergeten: meteen overnemen */
 window.addEventListener("storage", e => { if (e.key === OPSLAG || e.key === null) { data = leesOpslag(); toon(); } });
 
-$("wis").addEventListener("click", () => { try { localStorage.removeItem(OPSLAG); } catch (err) { console.error("Excel vergeten mislukt:", err); } data = leeg(); toon(); });
+$("wis").addEventListener("click", () => {
+  try { localStorage.removeItem(OPSLAG); } catch (err) { console.error("Excel vergeten mislukt:", err); }
+  data = zetStandaard(leeg()); toon(); edVul(true);
+});
+$("status").addEventListener("click", e => {
+  if (e.target.id !== "naarStandaard") return;
+  zetStandaard(data); bewaarData(); toon(); edVul(true);
+});
 
 /* ---------- Geplakte regels ---------- */
 function leesPlak() {
@@ -797,8 +1130,8 @@ function maakEml(naar, naam, onderwerp, html, lijst) {
   stukken.push("--" + grens + "--\r\n");
   return stukken;
 }
-function download(naam, inhoud) {
-  const url = URL.createObjectURL(new Blob(inhoud, { type: "message/rfc822" }));
+function download(naam, inhoud, type = "message/rfc822") {
+  const url = URL.createObjectURL(new Blob(inhoud, { type }));
   const a = document.createElement("a"); a.href = url; a.download = naam;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 30000);
@@ -876,6 +1209,100 @@ $("resultaten").addEventListener("click", e => {
   if (e.target.id === "alles") klaar.filter(m => m.tekst === undefined).forEach((m, i) => setTimeout(() => download(m.bestandsnaam, m.maak()), i * 500));
 });
 
+/* ---------- Teksten aanpassen (editor) en downloaden als Excel ---------- */
+const NIEUW = "__nieuw__";
+const namenVan = r => (data.redenNamen && Object.hasOwn(data.redenNamen, r)) ? data.redenNamen[r] : {};
+/* Keuzelijst van de editor opbouwen. velden = true: ook de invulvelden opnieuw vullen. */
+function edVul(velden) {
+  const redenen = [...new Set(data.teksten.map(t => t.reden))];
+  const keuze = $("edKeuze").value;
+  $("edKeuze").innerHTML = redenen.map(r => `<option value="${esc(r)}">${esc(redenNaam(r))}</option>`).join("")
+    + `<option value="${NIEUW}">${esc(T("edNieuw"))}</option>`;
+  if ([...$("edKeuze").options].some(o => o.value === keuze)) $("edKeuze").value = keuze;
+  if (velden) edToon();
+}
+function edToon() {
+  const r = $("edKeuze").value, nieuw = r === NIEUW, n = nieuw ? {} : namenVan(r);
+  $("edCode").value = nieuw ? "" : r;
+  TALEN.forEach(x => {
+    const t = nieuw ? null : data.teksten.find(t => t.reden === r && t.taal === x);
+    $("edNaam" + x).value = n[x.toLowerCase()] || "";
+    $("edOnderwerp" + x).value = t ? t.onderwerp : "";
+    $("edTekst" + x).value = t ? t.tekst : "";
+  });
+  $("edVersie").value = data.versie || "";
+  $("edWeg").hidden = nieuw;
+  $("edInfo").textContent = "";
+}
+$("edKeuze").addEventListener("change", edToon);
+$("aanpassen").addEventListener("click", () => { $("editor").hidden = false; edVul(true); $("editor").scrollIntoView({ behavior: "smooth" }); });
+$("edSluit").addEventListener("click", () => { $("editor").hidden = true; $("aanpassen").scrollIntoView({ behavior: "smooth" }); });
+/* Na een wijziging: onthouden, alles bijwerken en melden */
+function naWijziging(melding) {
+  const ok = bewaarData();
+  toon(); edVul(true); opnieuw();
+  $("edInfo").innerHTML = ok ? `<span class="ok">${esc(melding)}</span>` : foutHtml([T("nietOnthouden")]);
+}
+$("edBewaar").addEventListener("click", () => {
+  const oud = $("edKeuze").value, nieuw = oud === NIEUW;
+  const code = $("edCode").value.trim(), fouten = [], rijen = [];
+  if (!code) fouten.push(T("edGeenCode"));
+  else if (code === EIGEN || code === NIEUW || (code !== oud && data.teksten.some(t => t.reden === code))) fouten.push(T("edDubbel", { code }));
+  TALEN.forEach(x => {
+    const o = $("edOnderwerp" + x).value.trim(), t = $("edTekst" + x).value.replace(/\r\n/g, "\n").trim();
+    if (!o && !t) return;                                    // taal leeg gelaten
+    if (!o || !t) { fouten.push(T("edOnvolledig", { taal: T("taal" + x) })); return; }
+    rijen.push({ reden: code, taal: x, onderwerp: o, tekst: t });
+  });
+  if (!rijen.length && !fouten.length) fouten.push(T("edLeeg"));
+  if (fouten.length) { $("edInfo").innerHTML = foutHtml(fouten); return; }
+  // Nieuwe lijst: de reden blijft op dezelfde plaats; andere talen (bv. DE uit een Excel) blijven bewaard.
+  const lijst = []; let gezet = false;
+  data.teksten.forEach(t => {
+    if (nieuw || t.reden !== oud) { lijst.push(t); return; }
+    if (!gezet) { lijst.push(...rijen); gezet = true; }
+    if (!TALEN.includes(t.taal)) lijst.push({ ...t, reden: code });
+  });
+  if (!gezet) lijst.push(...rijen);
+  const namen = Object.assign(Object.create(null), data.redenNamen);
+  delete namen[oud];
+  const nm = { nl: $("edNaamNL").value.trim(), fr: $("edNaamFR").value.trim(), en: $("edNaamEN").value.trim() };
+  if (nm.nl || nm.fr || nm.en) namen[code] = nm;
+  data.teksten = lijst; data.redenNamen = namen;
+  data.versie = $("edVersie").value.trim(); data.bestandTeksten = AANGEPAST;
+  if ($("reden").value === oud) $("reden").value = code;
+  edVul(false); $("edKeuze").value = code;
+  naWijziging(T("edOpgeslagen"));
+});
+$("edWeg").addEventListener("click", () => {
+  const r = $("edKeuze").value;
+  if (r === NIEUW) return;
+  if (new Set(data.teksten.map(t => t.reden)).size <= 1) { $("edInfo").innerHTML = foutHtml([T("edMinstensEen")]); return; }
+  if (!window.confirm(T("edWegVraag", { naam: redenNaam(r) }))) return;
+  data.teksten = data.teksten.filter(t => t.reden !== r);
+  const namen = Object.assign(Object.create(null), data.redenNamen); delete namen[r]; data.redenNamen = namen;
+  data.bestandTeksten = AANGEPAST;
+  naWijziging(T("edOpgeslagen"));
+});
+$("edStandaard").addEventListener("click", () => {
+  if (!window.confirm(T("edStandaardVraag"))) return;
+  zetStandaard(data);
+  naWijziging(T("edOpgeslagen"));
+});
+/* Huidige teksten als Excel (zelfde opbouw als texts.xlsx: tabbladen Texts, Reasons en Info) */
+$("downloadTeksten").addEventListener("click", () => {
+  const redenen = [...new Set(data.teksten.map(t => t.reden))];
+  const boek = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(boek, XLSX.utils.aoa_to_sheet([["Reason", "Language", "Subject", "Text"],
+    ...data.teksten.map(t => [t.reden, t.taal, t.onderwerp, t.tekst])]), "Texts");
+  XLSX.utils.book_append_sheet(boek, XLSX.utils.aoa_to_sheet([["Reason", "NL", "FR", "EN"],
+    ...redenen.map(r => { const n = namenVan(r); return [r, n.nl || "", n.fr || "", n.en || ""]; })]), "Reasons");
+  XLSX.utils.book_append_sheet(boek, XLSX.utils.aoa_to_sheet([["Version", data.versie || ""]]), "Info");
+  const bytes = XLSX.write(boek, { bookType: "xlsx", type: "array" });
+  const naam = ("texts" + (data.versie ? " " + data.versie : "")).replace(/[\\/:*?"<>|]/g, "-") + ".xlsx";
+  download(naam, [bytes], "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+});
+
 data = leesOpslag();
 /* ---------- Taal wisselen ---------- */
 let gemaakt = false;   // staan er al mails klaar? Dan bij taalwissel of andere bijlagen opnieuw tonen
@@ -885,6 +1312,7 @@ function pasTaalToe() {
   toon();
   $("plak").dispatchEvent(new Event("input"));
   toonBijlagen();
+  edVul(false);   // alleen de namen in de keuzelijst; niet-opgeslagen invoer blijft staan
   if (gemaakt) $("maak").click(); else $("resultaten").textContent = T("resultatenLeeg");
 }
 document.querySelector(".talen").addEventListener("click", e => {
