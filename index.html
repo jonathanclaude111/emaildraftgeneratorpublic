@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="generator" content="mailsjablonen-automatisch">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-HLBniRBq32syKZT0DC4FrdOY6+gMD/mQgqEbW6TpcAM='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-LzVSGMMD4WlvnnBW3Cuw7yb01sLUT/v/9VJq2clk6ew='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -265,7 +265,8 @@ const TEKST = {
   "geenFormulier": "\"{naam}\" is niet dit formulier (of een oudere versie). Er is niets opgeslagen. Kies het formulier dat je nu open hebt.",
   "geenToestemming": "Geen toestemming om het formulier aan te passen. Er is niets opgeslagen.",
   "schrijfFout": "Opslaan in het formulier is mislukt: {fout}",
-  "downloadUitleg": "Deze browser kan het formulier niet zelf aanpassen. Er is een nieuw formulier gedownload: vervang je oude bestand door dit bestand. Tot dan blijven je wijzigingen in deze browser bewaard."
+  "downloadUitleg": "Deze browser kan het formulier niet zelf aanpassen. Er is een nieuw formulier gedownload: vervang je oude bestand door dit bestand. Tot dan blijven je wijzigingen in deze browser bewaard.",
+  "nietGevonden": "Het formulier staat niet meer op de vorige plaats (verplaatst of hernoemd). Er is niets opgeslagen. Klik nogmaals op Opslaan en kies het formulier opnieuw."
  },
  "en": {
   "s1": "1. Load contacts",
@@ -344,7 +345,8 @@ const TEKST = {
   "geenFormulier": "\"{naam}\" is not this form (or an older version). Nothing was saved. Choose the form you have open now.",
   "geenToestemming": "No permission to change the form. Nothing was saved.",
   "schrijfFout": "Saving in the form failed: {fout}",
-  "downloadUitleg": "This browser cannot change the form itself. A new form has been downloaded: replace your old file with this file. Until then your changes are kept in this browser."
+  "downloadUitleg": "This browser cannot change the form itself. A new form has been downloaded: replace your old file with this file. Until then your changes are kept in this browser.",
+  "nietGevonden": "The form is no longer in its previous place (moved or renamed). Nothing was saved. Click Save again and choose the form again."
  },
  "fr": {
   "s1": "1. Charger les contacts",
@@ -423,7 +425,8 @@ const TEKST = {
   "geenFormulier": "« {naam} » n'est pas ce formulaire (ou une version plus ancienne). Rien n'a été enregistré. Choisissez le formulaire que vous avez ouvert.",
   "geenToestemming": "Pas d'autorisation pour modifier le formulaire. Rien n'a été enregistré.",
   "schrijfFout": "L'enregistrement dans le formulaire a échoué : {fout}",
-  "downloadUitleg": "Ce navigateur ne peut pas modifier le formulaire lui-même. Un nouveau formulaire a été téléchargé : remplacez votre ancien fichier par celui-ci. En attendant, vos modifications restent dans ce navigateur."
+  "downloadUitleg": "Ce navigateur ne peut pas modifier le formulaire lui-même. Un nouveau formulaire a été téléchargé : remplacez votre ancien fichier par celui-ci. En attendant, vos modifications restent dans ce navigateur.",
+  "nietGevonden": "Le formulaire n'est plus à son emplacement précédent (déplacé ou renommé). Rien n'a été enregistré. Cliquez à nouveau sur Enregistrer et choisissez à nouveau le formulaire."
  }
 };
 const TAAL_OPSLAG = "mailsjablonen_taal";   // gedeeld door beide pagina's
@@ -1042,18 +1045,37 @@ async function dbDoe(modus, actie) {
 // Het kenmerk van het gegevensblok wordt in stukjes opgebouwd, zodat het maar één keer letterlijk in het bestand staat.
 const BLOK_ID = 'id="' + 'standaard">';
 const BLOK = new RegExp('(<script type="application/json" ' + BLOK_ID + '\\n?)([\\s\\S]*?)(\\n?<' + '/script>)');   // "<" + "/script>": anders eindigt dit script hier
+const gebruikersfout = melding => Object.assign(new Error(melding), { gebruiker: true });
+const vergeetFormulier = () => dbDoe("readwrite", s => s.delete("formulier")).catch(err => console.warn("Vergeten mislukt:", err));
+const kiesFormulier = async () => (await window.showOpenFilePicker({ types: [{ description: "HTML", accept: { "text/html": [".html", ".htm"] } }] }))[0];
+/* Toestemming om te lezen en te schrijven; daarna het bestand zelf */
+async function openBestand(h) {
+  if (await h.queryPermission({ mode: "readwrite" }) !== "granted" && await h.requestPermission({ mode: "readwrite" }) !== "granted")
+    throw gebruikersfout(T("geenToestemming"));
+  return h.getFile();
+}
 async function opslaanInBestand() {
   let h = null;
   try { h = await dbDoe("readonly", s => s.get("formulier")); }
   catch (err) { console.warn("Gekozen formulier kon niet gelezen worden:", err); }
-  if (!h) [h] = await window.showOpenFilePicker({ types: [{ description: "HTML", accept: { "text/html": [".html", ".htm"] } }] });
-  if (await h.queryPermission({ mode: "readwrite" }) !== "granted" && await h.requestPermission({ mode: "readwrite" }) !== "granted")
-    throw Object.assign(new Error(T("geenToestemming")), { gebruiker: true });
-  const inhoud = await (await h.getFile()).text();
+  const onthouden = !!h;
+  if (!h) h = await kiesFormulier();
+  let f;
+  try { f = await openBestand(h); }
+  catch (err) {
+    // Onthouden formulier verplaatst, hernoemd of verwijderd: vergeten en opnieuw laten kiezen
+    if (!onthouden || !["NotFoundError", "NotReadableError"].includes(err.name)) throw err;
+    console.warn("Onthouden formulier niet meer gevonden:", err.name);
+    await vergeetFormulier();
+    try { h = await kiesFormulier(); }
+    catch (e) { if (e.name === "AbortError") throw e; throw gebruikersfout(T("nietGevonden")); }   // browser laat het venster nu niet toe: volgende klik wel
+    f = await openBestand(h);
+  }
+  const inhoud = await f.text();
   const m = inhoud.match(BLOK);
   if (!m || !inhoud.includes(MERK) || inhoud.split(BLOK_ID).length !== 2) {
-    await dbDoe("readwrite", s => s.delete("formulier")).catch(err => console.warn("Vergeten mislukt:", err));
-    throw Object.assign(new Error(T("geenFormulier", { naam: h.name })), { gebruiker: true });
+    await vergeetFormulier();
+    throw gebruikersfout(T("geenFormulier", { naam: h.name }));
   }
   // Teksten zoals ze NU in het bestand staan (misschien heeft een collega intussen iets opgeslagen), daarop onze wijzigingen
   const nieuw = pasToe(leesBlok(m[2]));
