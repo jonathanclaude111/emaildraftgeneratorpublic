@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-bJspb5d24LY172BttBAaqMQF/YEE39tTOZ93gLCEAh8='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-VEhFWEsHpIr6hg3crXfepCIPA9af6lZ7l5ZjEtxynPw='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -305,42 +305,42 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 "New contact person": {
 "nl": "Nieuwe contactpersoon",
 "fr": "Nouvel interlocuteur",
-"en": ""
+"en": "New contact person"
 },
 "Price on request": {
 "nl": "Prijs op aanvraag",
 "fr": "Prix sur demande",
-"en": ""
+"en": "Price on request"
 },
 "Price increase": {
 "nl": "Prijsverhoging",
 "fr": "Augmentation de prix",
-"en": ""
+"en": "Price increase"
 },
 "Price decrease": {
 "nl": "Prijsverlaging",
 "fr": "Baisse de prix",
-"en": ""
+"en": "Price decrease"
 },
 "Excess stock - clearance sale": {
 "nl": "Te veel stock - uitverkoop",
 "fr": "Surstock - liquidation",
-"en": ""
+"en": "Excess stock - clearance sale"
 },
 "Specification change": {
 "nl": "Wijziging specificatie",
 "fr": "Modification de spécification",
-"en": ""
+"en": "Specification change"
 },
 "Packaging change": {
 "nl": "Wijziging verpakking",
 "fr": "Modification d'emballage",
-"en": ""
+"en": "Packaging change"
 },
 "Propose alternative product": {
 "nl": "Alternatief product voorstellen",
 "fr": "Proposer un produit alternatif",
-"en": ""
+"en": "Propose alternative product"
 }
 }
 }
@@ -1224,6 +1224,7 @@ function edVul(velden) {
 function edToon() {
   const r = $("edKeuze").value, nieuw = r === NIEUW, n = nieuw ? {} : namenVan(r);
   $("edCode").value = nieuw ? "" : r;
+  $("edNaamEN").placeholder = nieuw ? "" : r;   // leeg = de code wordt getoond (die is meestal al Engels)
   TALEN.forEach(x => {
     const t = nieuw ? null : data.teksten.find(t => t.reden === r && t.taal === x);
     $("edNaam" + x).value = n[x.toLowerCase()] || "";
@@ -1235,6 +1236,7 @@ function edToon() {
   $("edInfo").textContent = "";
 }
 $("edKeuze").addEventListener("change", edToon);
+$("edCode").addEventListener("input", () => { $("edNaamEN").placeholder = $("edCode").value.trim(); });
 $("aanpassen").addEventListener("click", () => { $("editor").hidden = false; edVul(true); $("editor").scrollIntoView({ behavior: "smooth" }); });
 $("edSluit").addEventListener("click", () => { $("editor").hidden = true; $("aanpassen").scrollIntoView({ behavior: "smooth" }); });
 /* Na een wijziging: onthouden, alles bijwerken en melden */
