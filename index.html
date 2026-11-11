@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-tHUYnK4AScBCkWAm47ISs0au6/zldtO0oNv/SJh+qHI='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-BsB7Q/J2Rc2rEynM11pWaDTlQpjl4B4ZapjhGz8JZjE='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -76,7 +76,6 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  .ql-toolbar.ql-snow{margin-top:4px;background:#fff;border-radius:5px 5px 0 0}
  .ql-container.ql-snow{font-family:Calibri,Carlito,sans-serif;font-size:11pt;background:#fff;border-radius:0 0 5px 5px}
  .ql-editor{min-height:150px}
- .codes{font-size:.82rem;color:#8A979D;margin:6px 0 0}
  /* Gewone mail: tekst blijft aanpasbaar, maar zonder opmaakknoppen */
  .zonderOpmaak .ql-toolbar{display:none}
  .zonderOpmaak .ql-container.ql-snow{border-top:1px solid #ccc;border-radius:5px;margin-top:4px}
@@ -127,7 +126,6 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  <h2 data-t="s4">4. Reden en tekst</h2>
  <label for="reden" data-t="reden">Reden</label>
  <select id="reden"></select>
- <p class="status codes" data-t="codesRegel"></p>
  <p class="status" id="talenInfo" data-t="talenFilter" hidden></p>
  <div class="taalblok" id="blokNL">
   <div class="blokkop"><span class="taal">NL</span> <b data-t="taalNL"></b> <button type="button" class="licht klein" id="origNL" data-t="origineel" hidden>↩︎ origineel</button></div>
@@ -256,8 +254,7 @@ const TEKST = {
   "origineel": "↩︎ origineel",
   "tekstWeg": "🗑 Deze tekst verwijderen",
   "tekstWegVraag": "Deze tekst verwijderen (alle talen)?",
-  "tekstNiet": "Onthouden lukt niet in deze browser: je wijziging geldt alleen tot je de pagina sluit.",
-  "codesRegel": "Codes: {contact}, {bedrijf}, {producten}, {verzender}, Cher/Chère, {enkelvoud|meervoud}"
+  "tekstNiet": "Onthouden lukt niet in deze browser: je wijziging geldt alleen tot je de pagina sluit."
  },
  "en": {
   "s1": "1. Load contacts",
@@ -328,8 +325,7 @@ const TEKST = {
   "origineel": "↩︎ original",
   "tekstWeg": "🗑 Delete this text",
   "tekstWegVraag": "Delete this text (all languages)?",
-  "tekstNiet": "This browser cannot save it: your change only lasts until you close the page.",
-  "codesRegel": "Codes: {contact}, {company}, {products}, {sender}, Cher/Chère, {singular|plural}"
+  "tekstNiet": "This browser cannot save it: your change only lasts until you close the page."
  },
  "fr": {
   "s1": "1. Charger les contacts",
@@ -400,8 +396,7 @@ const TEKST = {
   "origineel": "↩︎ original",
   "tekstWeg": "🗑 Supprimer ce texte",
   "tekstWegVraag": "Supprimer ce texte (toutes les langues) ?",
-  "tekstNiet": "Ce navigateur ne peut pas l'enregistrer : votre modification ne dure que jusqu'à la fermeture de la page.",
-  "codesRegel": "Codes : {contact}, {entreprise}, {produits}, {expéditeur}, Cher/Chère, {singulier|pluriel}"
+  "tekstNiet": "Ce navigateur ne peut pas l'enregistrer : votre modification ne dure que jusqu'à la fermeture de la page."
  }
 };
 const TAAL_OPSLAG = "mailsjablonen_taal";   // gedeeld door beide pagina's
