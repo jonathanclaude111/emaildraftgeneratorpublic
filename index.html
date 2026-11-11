@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-BsB7Q/J2Rc2rEynM11pWaDTlQpjl4B4ZapjhGz8JZjE='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-poMnSlmh5QLutvRftI9Y/bkYlbjz+iMHyorxc99DB7Q='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -143,6 +143,7 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   <label for="tekstEN" id="tekstLabelEN" data-t="tekstLabel">Tekst</label><div id="tekstEN" class="tekstvak" aria-labelledby="tekstLabelEN"></div>
  </div>
  <div class="status" id="tekstinfo"></div>
+ <button type="button" id="opslaan" data-t="opslaan" hidden>💾 Wijzigingen opslaan</button>
  <button type="button" class="licht klein" id="tekstWeg" data-t="tekstWeg" hidden>🗑 Deze tekst verwijderen</button>
 </section>
 
@@ -254,7 +255,10 @@ const TEKST = {
   "origineel": "↩︎ origineel",
   "tekstWeg": "🗑 Deze tekst verwijderen",
   "tekstWegVraag": "Deze tekst verwijderen (alle talen)?",
-  "tekstNiet": "Onthouden lukt niet in deze browser: je wijziging geldt alleen tot je de pagina sluit."
+  "tekstNiet": "Onthouden lukt niet in deze browser: je wijziging geldt alleen tot je de pagina sluit.",
+  "opslaan": "💾 Wijzigingen opslaan",
+  "opgeslagen": "✅ Opgeslagen",
+  "nietOpgeslagenVraag": "Je wijzigingen aan de tekst zijn nog niet opgeslagen. Nu opslaan?\n\nOK = opslaan\nAnnuleren = wijzigingen weggooien"
  },
  "en": {
   "s1": "1. Load contacts",
@@ -325,7 +329,10 @@ const TEKST = {
   "origineel": "↩︎ original",
   "tekstWeg": "🗑 Delete this text",
   "tekstWegVraag": "Delete this text (all languages)?",
-  "tekstNiet": "This browser cannot save it: your change only lasts until you close the page."
+  "tekstNiet": "This browser cannot save it: your change only lasts until you close the page.",
+  "opslaan": "💾 Save changes",
+  "opgeslagen": "✅ Saved",
+  "nietOpgeslagenVraag": "Your changes to the text have not been saved yet. Save them now?\n\nOK = save\nCancel = discard changes"
  },
  "fr": {
   "s1": "1. Charger les contacts",
@@ -396,7 +403,10 @@ const TEKST = {
   "origineel": "↩︎ original",
   "tekstWeg": "🗑 Supprimer ce texte",
   "tekstWegVraag": "Supprimer ce texte (toutes les langues) ?",
-  "tekstNiet": "Ce navigateur ne peut pas l'enregistrer : votre modification ne dure que jusqu'à la fermeture de la page."
+  "tekstNiet": "Ce navigateur ne peut pas l'enregistrer : votre modification ne dure que jusqu'à la fermeture de la page.",
+  "opslaan": "💾 Enregistrer les modifications",
+  "opgeslagen": "✅ Enregistré",
+  "nietOpgeslagenVraag": "Vos modifications du texte ne sont pas encore enregistrées. Les enregistrer maintenant ?\n\nOK = enregistrer\nAnnuler = abandonner les modifications"
  }
 };
 const TAAL_OPSLAG = "mailsjablonen_taal";   // gedeeld door beide pagina's
@@ -895,12 +905,36 @@ function bewaarEigen() {
   catch (err) { console.error("Aangepaste tekst onthouden mislukt:", err); $("tekstinfo").innerHTML = foutHtml([T("tekstNiet")]); }
 }
 const standaardVan = (r, x) => STANDAARD.find(t => t.reden === r && t.taal === x);
-const isAangepast = (r, x) => Object.hasOwn(eigen.teksten, r + "|" + x);
-/* Tekst voor reden r in taal x: eigen aanpassing, anders de standaardtekst */
-function tekstVan(r, x) {
-  if (isAangepast(r, x)) return eigen.teksten[r + "|" + x];
+/* concept = wijzigingen op het scherm die nog niet opgeslagen zijn: { "reden|TAAL": { onderwerp, tekst } } */
+let concept = Object.create(null);
+/* Opgeslagen tekst voor reden r in taal x: eigen aanpassing, anders de standaardtekst */
+function opgeslagenVan(r, x) {
+  if (Object.hasOwn(eigen.teksten, r + "|" + x)) return eigen.teksten[r + "|" + x];
   const s = standaardVan(r, x);
   return s ? { onderwerp: s.onderwerp, tekst: s.tekst } : null;
+}
+/* Tekst zoals op het scherm: niet-opgeslagen wijziging, anders de opgeslagen tekst (ook gebruikt voor de mails) */
+function tekstVan(r, x) {
+  return Object.hasOwn(concept, r + "|" + x) ? concept[r + "|" + x] : opgeslagenVan(r, x);
+}
+const gelijk = (a, b) => String(a).replace(/\s+/g, " ").trim() === String(b).replace(/\s+/g, " ").trim();
+const gelijkeTekst = (a, b) => !!a && !!b && gelijk(a.onderwerp, b.onderwerp) && gelijk(a.tekst, b.tekst);
+/* "↩︎ origineel" alleen als de tekst op het scherm verschilt van de standaardtekst */
+function syncOrig(x) {
+  const r = $("reden").value, s = standaardVan(r, x);
+  $("orig" + x).hidden = !s || gelijkeTekst(tekstVan(r, x), s);
+}
+const heeftConcept = () => Object.keys(concept).length > 0;
+function syncOpslaan() { $("opslaan").hidden = !heeftConcept(); }
+/* Niet-opgeslagen wijzigingen bewaren. Gelijk aan de standaardtekst? Dan is er geen eigen aanpassing meer nodig. */
+function slaOp() {
+  Object.entries(concept).forEach(([sleutel, t]) => {
+    const [r, x] = sleutel.split("|"), s = standaardVan(r, x);
+    if (s && gelijkeTekst(t, s)) delete eigen.teksten[sleutel];
+    else eigen.teksten[sleutel] = t;
+  });
+  concept = Object.create(null);
+  bewaarEigen(); syncOpslaan();
 }
 /* Alleen bruikbaar als onderwerp en tekst ingevuld zijn */
 function bruikbaar(r, x) {
@@ -930,38 +964,53 @@ function leesTekst(x) {
     .replace(/<p([^>]*)><\/p>/g, "<p$1><br></p>");   // lege regel zichtbaar houden in Outlook
   return DOMPurify.sanitize(html, { FORBID_TAGS: ["style", "form", "input", "button", "textarea", "select"], ALLOW_DATA_ATTR: false });
 }
-const gelijk = (a, b) => String(a).replace(/\s+/g, " ").trim() === String(b).replace(/\s+/g, " ").trim();
 /* Velden van taal x vullen voor de gekozen reden */
 function toonTekst(x) {
   const r = $("reden").value, t = tekstVan(r, x);
   $("onderwerp" + x).value = t ? t.onderwerp : "";
   zetTekst(x, t ? t.tekst : "");
-  $("orig" + x).hidden = !(isAangepast(r, x) && standaardVan(r, x));
+  syncOrig(x);
 }
 function toonTeksten() {
   TALEN.forEach(toonTekst);
   $("tekstWeg").hidden = !eigen.nieuw.includes($("reden").value);
+  syncOpslaan();
 }
-/* Gebruiker past iets aan: meteen onthouden. Weer gelijk aan de standaardtekst? Dan de aanpassing vergeten. */
+/* Gebruiker past iets aan: als niet-opgeslagen wijziging bijhouden (knop "Wijzigingen opslaan" verschijnt).
+   Weer gelijk aan de opgeslagen tekst? Dan is er niets meer op te slaan. */
 function wijzig(x) {
-  const r = $("reden").value, sleutel = r + "|" + x, s = standaardVan(r, x);
+  const r = $("reden").value, sleutel = r + "|" + x;
   const t = { onderwerp: $("onderwerp" + x).value, tekst: leesTekst(x) };
-  if (s && gelijk(s.onderwerp, t.onderwerp) && gelijk(s.tekst, t.tekst)) delete eigen.teksten[sleutel];
-  else eigen.teksten[sleutel] = t;
-  bewaarEigen();
-  $("orig" + x).hidden = !(isAangepast(r, x) && s);
+  const o = opgeslagenVan(r, x);
+  if (gelijkeTekst(t, o) || (!o && !t.onderwerp.trim() && !t.tekst)) delete concept[sleutel];
+  else concept[sleutel] = t;
+  $("tekstinfo").textContent = "";
+  syncOrig(x); syncOpslaan();
   vulRedenen();   // de naam in de keuzelijst is het onderwerp
 }
+$("opslaan").addEventListener("click", () => {
+  slaOp(); vulRedenen();
+  $("tekstinfo").innerHTML = `<span class="ok">${esc(T("opgeslagen"))}</span>`;
+});
+/* Pagina sluiten met niet-opgeslagen wijzigingen: de browser vraagt of je de pagina echt wilt verlaten */
+window.addEventListener("beforeunload", e => { if (heeftConcept()) e.preventDefault(); });
 TALEN.forEach(x => {
   editors[x] = new Quill("#tekst" + x, { theme: "snow", modules: { toolbar: KNOPPEN } });
   editors[x].on("text-change", (d, o, bron) => { if (bron === "user") wijzig(x); });
   $("onderwerp" + x).addEventListener("input", () => wijzig(x));
-  $("orig" + x).addEventListener("click", () => {
-    delete eigen.teksten[$("reden").value + "|" + x];
-    bewaarEigen(); toonTekst(x); vulRedenen(); opnieuw();
+  $("orig" + x).addEventListener("click", () => {   // standaardtekst terug in de velden; opslaan blijft nodig
+    const s = standaardVan($("reden").value, x); if (!s) return;
+    $("onderwerp" + x).value = s.onderwerp; zetTekst(x, s.tekst);
+    wijzig(x);
   });
 });
 $("reden").addEventListener("change", () => {
+  if (heeftConcept()) {                       // eerst vragen wat er met niet-opgeslagen wijzigingen moet gebeuren
+    const gekozen = $("reden").value;
+    if (window.confirm(T("nietOpgeslagenVraag"))) slaOp();
+    else concept = Object.create(null);
+    vulRedenen(); $("reden").value = gekozen;
+  }
   if ($("reden").value === NIEUW) {          // nieuwe tekst: lege velden met een eigen code
     const code = "r" + Date.now().toString(36);
     eigen.nieuw.push(code); bewaarEigen();
@@ -973,7 +1022,7 @@ $("tekstWeg").addEventListener("click", () => {
   const r = $("reden").value;
   if (!eigen.nieuw.includes(r) || !window.confirm(T("tekstWegVraag"))) return;
   eigen.nieuw = eigen.nieuw.filter(x => x !== r);
-  TALEN.forEach(x => { delete eigen.teksten[r + "|" + x]; });
+  TALEN.forEach(x => { delete eigen.teksten[r + "|" + x]; delete concept[r + "|" + x]; });
   bewaarEigen(); vulRedenen(); toonTeksten(); opnieuw();
 });
 /* klantnummer -> contact */
