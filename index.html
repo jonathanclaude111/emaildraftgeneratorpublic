@@ -2,7 +2,8 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-poMnSlmh5QLutvRftI9Y/bkYlbjz+iMHyorxc99DB7Q='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="generator" content="mailsjablonen-automatisch">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-HLBniRBq32syKZT0DC4FrdOY6+gMD/mQgqEbW6TpcAM='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -128,17 +129,17 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  <select id="reden"></select>
  <p class="status" id="talenInfo" data-t="talenFilter" hidden></p>
  <div class="taalblok" id="blokNL">
-  <div class="blokkop"><span class="taal">NL</span> <b data-t="taalNL"></b> <button type="button" class="licht klein" id="origNL" data-t="origineel" hidden>↩︎ origineel</button></div>
+  <div class="blokkop"><span class="taal">NL</span> <b data-t="taalNL"></b> <button type="button" class="licht klein" id="origNL" data-t="origineel" hidden>↩︎ vorige versie</button></div>
   <label for="onderwerpNL" data-t="onderwerp">Onderwerp</label><input id="onderwerpNL" maxlength="300">
   <label for="tekstNL" id="tekstLabelNL" data-t="tekstLabel">Tekst</label><div id="tekstNL" class="tekstvak" aria-labelledby="tekstLabelNL"></div>
  </div>
  <div class="taalblok" id="blokFR">
-  <div class="blokkop"><span class="taal">FR</span> <b data-t="taalFR"></b> <button type="button" class="licht klein" id="origFR" data-t="origineel" hidden>↩︎ origineel</button></div>
+  <div class="blokkop"><span class="taal">FR</span> <b data-t="taalFR"></b> <button type="button" class="licht klein" id="origFR" data-t="origineel" hidden>↩︎ vorige versie</button></div>
   <label for="onderwerpFR" data-t="onderwerp">Onderwerp</label><input id="onderwerpFR" maxlength="300">
   <label for="tekstFR" id="tekstLabelFR" data-t="tekstLabel">Tekst</label><div id="tekstFR" class="tekstvak" aria-labelledby="tekstLabelFR"></div>
  </div>
  <div class="taalblok" id="blokEN">
-  <div class="blokkop"><span class="taal">EN</span> <b data-t="taalEN"></b> <button type="button" class="licht klein" id="origEN" data-t="origineel" hidden>↩︎ origineel</button></div>
+  <div class="blokkop"><span class="taal">EN</span> <b data-t="taalEN"></b> <button type="button" class="licht klein" id="origEN" data-t="origineel" hidden>↩︎ vorige versie</button></div>
   <label for="onderwerpEN" data-t="onderwerp">Onderwerp</label><input id="onderwerpEN" maxlength="300">
   <label for="tekstEN" id="tekstLabelEN" data-t="tekstLabel">Tekst</label><div id="tekstEN" class="tekstvak" aria-labelledby="tekstLabelEN"></div>
  </div>
@@ -169,12 +170,13 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  <div id="resultaten" class="status">Hier verschijnen de mails.</div>
 </section>
 
-<!-- Ingebouwde standaardteksten (opgemaakte tekst). Alleen gegevens, geen code: dit blok wordt nooit uitgevoerd.
-     Eigen aanpassingen worden apart onthouden in de browser; wat je niet aanpast, volgt altijd dit blok. -->
+<!-- Mailteksten (opgemaakte tekst), zelf toegevoegde teksten en per tekst de 5 vorige versies.
+     Alleen gegevens, geen code: dit blok wordt nooit uitgevoerd. De knop "Wijzigingen opslaan" schrijft dit blok opnieuw. -->
 <script type="application/json" id="standaard">
-{"teksten": [{"reden": "New contact person", "taal": "NL", "onderwerp": "Nieuwe contactpersoon voor uw account", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat X onze firma helaas heeft verlaten. Vanaf nu neem ik de opvolging van uw account over.\u003c/p>\u003cp>Aarzel niet om mij te contacteren bij vragen of opmerkingen.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "New contact person", "taal": "FR", "onderwerp": "Nouvel interlocuteur pour votre compte", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous tenons à vous informer que X a malheureusement quitté notre entreprise. Je reprends désormais la gestion de votre compte.\u003c/p>\u003cp>Je reste à votre entière disposition pour toute question ou remarque.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "New contact person", "taal": "EN", "onderwerp": "New contact person for your account", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would like to inform you that X has unfortunately left our company. I will be taking over your account from now on.\u003c/p>\u003cp>Please do not hesitate to contact me should you have any questions or comments.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Price on request", "taal": "NL", "onderwerp": "Prijs op aanvraag met onmiddellijke ingang", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat de prijs van {het volgende product|de volgende producten} met onmiddellijke ingang enkel nog op aanvraag beschikbaar is:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Indien u interesse heeft, bezorgen wij u graag een offerte.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Price on request", "taal": "FR", "onderwerp": "Prix sur demande avec effet immédiat", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous informons qu'à compter de ce jour, {le prix du produit suivant est disponible|les prix des produits suivants sont disponibles} uniquement sur demande :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Si vous êtes intéressé(e), nous serons heureux de vous transmettre un devis.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Price on request", "taal": "EN", "onderwerp": "Price on request, effective immediately", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please be advised that, effective immediately, the price of the following {product|products} is only available upon request:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Should you be interested, we would be happy to provide you with a quote.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Price increase", "taal": "NL", "onderwerp": "Prijsaanpassing met onmiddellijke ingang", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Helaas moeten wij u laten weten dat de prijs van {het volgende product|de volgende producten} met onmiddellijke ingang verhoogd wordt:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>U vindt {de nieuwe prijs|de nieuwe prijzen} in bijlage.\u003c/p>\u003cp>Aarzel niet om mij te contacteren bij vragen.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Price increase", "taal": "FR", "onderwerp": "Adaptation de prix avec effet immédiat", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous sommes au regret de vous informer que {le prix du produit suivant augmente|les prix des produits suivants augmentent} avec effet immédiat :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Vous trouverez {le nouveau prix|les nouveaux prix} en pièce jointe.\u003c/p>\u003cp>N'hésitez pas à me contacter pour toute question.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Price increase", "taal": "EN", "onderwerp": "Price adjustment effective immediately", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We regret to inform you that the price of the following {product|products} will increase, effective immediately:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please find the new {price|prices} attached.\u003c/p>\u003cp>Do not hesitate to contact me should you have any questions.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Price decrease", "taal": "NL", "onderwerp": "Lagere prijs met onmiddellijke ingang", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Goed nieuws: de prijs van {het volgende product|de volgende producten} daalt met onmiddellijke ingang:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>U vindt {de nieuwe prijs|de nieuwe prijzen} in bijlage.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Price decrease", "taal": "FR", "onderwerp": "Baisse de prix avec effet immédiat", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bonne nouvelle : {le prix du produit suivant baisse|les prix des produits suivants baissent} avec effet immédiat :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Vous trouverez {le nouveau prix|les nouveaux prix} en pièce jointe.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Price decrease", "taal": "EN", "onderwerp": "Lower price effective immediately", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Good news: the price of the following {product|products} will decrease, effective immediately:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please find the new {price|prices} attached.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Excess stock - clearance sale", "taal": "NL", "onderwerp": "Speciaal aanbod: extra stock beschikbaar", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Van {het volgende product|de volgende producten} hebben wij momenteel extra stock:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We bieden {dit product|deze producten} graag aan tegen een scherpe prijs. Laat u mij weten welke hoeveelheid u interesseert en tegen welke prijs u zou willen kopen?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Excess stock - clearance sale", "taal": "FR", "onderwerp": "Offre spéciale : stock supplémentaire disponible", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous disposons actuellement d'un stock supplémentaire {du produit suivant|des produits suivants} :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous {le|les} proposons volontiers à un prix avantageux. Pourriez-vous m'indiquer la quantité qui vous intéresse et à quel prix vous souhaiteriez acheter ?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Excess stock - clearance sale", "taal": "EN", "onderwerp": "Special offer: extra stock available", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We currently have extra stock of the following {product|products}:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would be happy to offer {it|them} at an attractive price. Could you let me know which quantity interests you and at what price you would like to buy?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Specification change", "taal": "NL", "onderwerp": "Wijziging productspecificatie", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat de specificatie van {het volgende product|de volgende producten} wijzigt:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>De nieuwe {specificatiefiche|specificatiefiches} bezorg ik u graag.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Specification change", "taal": "FR", "onderwerp": "Modification de la spécification produit", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous informons que la spécification {du produit suivant|des produits suivants} est modifiée :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Je vous transmets volontiers {la nouvelle fiche|les nouvelles fiches} de spécification.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Specification change", "taal": "EN", "onderwerp": "Change in product specification", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would like to inform you that the specification of the following {product|products} is changing:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>I will gladly send you the new specification {sheet|sheets}.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Packaging change", "taal": "NL", "onderwerp": "Wijziging verpakking", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat de verpakking van {het volgende product|de volgende producten} wijzigt:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>De details van de nieuwe verpakking bezorg ik u graag.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Packaging change", "taal": "FR", "onderwerp": "Modification de l'emballage", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous informons que l'emballage {du produit suivant|des produits suivants} est modifié :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Je vous transmets volontiers les détails du nouvel emballage.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Packaging change", "taal": "EN", "onderwerp": "Change in packaging", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would like to inform you that the packaging of the following {product|products} is changing:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>I will gladly send you the details of the new packaging.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Propose alternative product", "taal": "NL", "onderwerp": "Voorstel {alternatief product|alternatieve producten}", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Omwille van een rationalisatie van ons gamma willen wij u graag {een alternatief|alternatieven} voorstellen voor {het onderstaande product dat|de onderstaande producten die} wij u momenteel leveren:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>In bijlage vindt u de bijhorende documenten.\u003c/p>\u003cp>Zullen wij u een staal of een offerte bezorgen?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Propose alternative product", "taal": "FR", "onderwerp": "Proposition {de produit alternatif|de produits alternatifs}", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Dans le cadre d'une rationalisation de notre gamme, nous souhaitons vous proposer {une alternative au produit mentionné|des alternatives aux produits mentionnés} ci-dessous, que nous vous fournissons actuellement :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Vous trouverez les documents correspondants en pièce jointe.\u003c/p>\u003cp>Souhaitez-vous que nous vous transmettions un échantillon ou un devis ?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Propose alternative product", "taal": "EN", "onderwerp": "Alternative {product|products} proposal", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>As part of a rationalisation of our product range, we would like to propose {an alternative for the product|alternatives for the products} listed below, which we currently supply to you:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please find the relevant documents attached.\u003c/p>\u003cp>Would you like us to provide a sample or a quote?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}]}
+{"teksten": [{"reden": "New contact person", "taal": "NL", "onderwerp": "Nieuwe contactpersoon voor uw account", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat X onze firma helaas heeft verlaten. Vanaf nu neem ik de opvolging van uw account over.\u003c/p>\u003cp>Aarzel niet om mij te contacteren bij vragen of opmerkingen.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "New contact person", "taal": "FR", "onderwerp": "Nouvel interlocuteur pour votre compte", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous tenons à vous informer que X a malheureusement quitté notre entreprise. Je reprends désormais la gestion de votre compte.\u003c/p>\u003cp>Je reste à votre entière disposition pour toute question ou remarque.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "New contact person", "taal": "EN", "onderwerp": "New contact person for your account", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would like to inform you that X has unfortunately left our company. I will be taking over your account from now on.\u003c/p>\u003cp>Please do not hesitate to contact me should you have any questions or comments.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Price on request", "taal": "NL", "onderwerp": "Prijs op aanvraag met onmiddellijke ingang", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat de prijs van {het volgende product|de volgende producten} met onmiddellijke ingang enkel nog op aanvraag beschikbaar is:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Indien u interesse heeft, bezorgen wij u graag een offerte.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Price on request", "taal": "FR", "onderwerp": "Prix sur demande avec effet immédiat", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous informons qu'à compter de ce jour, {le prix du produit suivant est disponible|les prix des produits suivants sont disponibles} uniquement sur demande :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Si vous êtes intéressé(e), nous serons heureux de vous transmettre un devis.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Price on request", "taal": "EN", "onderwerp": "Price on request, effective immediately", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please be advised that, effective immediately, the price of the following {product|products} is only available upon request:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Should you be interested, we would be happy to provide you with a quote.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Price increase", "taal": "NL", "onderwerp": "Prijsaanpassing met onmiddellijke ingang", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Helaas moeten wij u laten weten dat de prijs van {het volgende product|de volgende producten} met onmiddellijke ingang verhoogd wordt:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>U vindt {de nieuwe prijs|de nieuwe prijzen} in bijlage.\u003c/p>\u003cp>Aarzel niet om mij te contacteren bij vragen.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Price increase", "taal": "FR", "onderwerp": "Adaptation de prix avec effet immédiat", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous sommes au regret de vous informer que {le prix du produit suivant augmente|les prix des produits suivants augmentent} avec effet immédiat :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Vous trouverez {le nouveau prix|les nouveaux prix} en pièce jointe.\u003c/p>\u003cp>N'hésitez pas à me contacter pour toute question.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Price increase", "taal": "EN", "onderwerp": "Price adjustment effective immediately", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We regret to inform you that the price of the following {product|products} will increase, effective immediately:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please find the new {price|prices} attached.\u003c/p>\u003cp>Do not hesitate to contact me should you have any questions.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Price decrease", "taal": "NL", "onderwerp": "Lagere prijs met onmiddellijke ingang", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Goed nieuws: de prijs van {het volgende product|de volgende producten} daalt met onmiddellijke ingang:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>U vindt {de nieuwe prijs|de nieuwe prijzen} in bijlage.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Price decrease", "taal": "FR", "onderwerp": "Baisse de prix avec effet immédiat", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bonne nouvelle : {le prix du produit suivant baisse|les prix des produits suivants baissent} avec effet immédiat :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Vous trouverez {le nouveau prix|les nouveaux prix} en pièce jointe.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Price decrease", "taal": "EN", "onderwerp": "Lower price effective immediately", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Good news: the price of the following {product|products} will decrease, effective immediately:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please find the new {price|prices} attached.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Excess stock - clearance sale", "taal": "NL", "onderwerp": "Speciaal aanbod: extra stock beschikbaar", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Van {het volgende product|de volgende producten} hebben wij momenteel extra stock:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We bieden {dit product|deze producten} graag aan tegen een scherpe prijs. Laat u mij weten welke hoeveelheid u interesseert en tegen welke prijs u zou willen kopen?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Excess stock - clearance sale", "taal": "FR", "onderwerp": "Offre spéciale : stock supplémentaire disponible", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous disposons actuellement d'un stock supplémentaire {du produit suivant|des produits suivants} :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous {le|les} proposons volontiers à un prix avantageux. Pourriez-vous m'indiquer la quantité qui vous intéresse et à quel prix vous souhaiteriez acheter ?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Excess stock - clearance sale", "taal": "EN", "onderwerp": "Special offer: extra stock available", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We currently have extra stock of the following {product|products}:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would be happy to offer {it|them} at an attractive price. Could you let me know which quantity interests you and at what price you would like to buy?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Specification change", "taal": "NL", "onderwerp": "Wijziging productspecificatie", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat de specificatie van {het volgende product|de volgende producten} wijzigt:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>De nieuwe {specificatiefiche|specificatiefiches} bezorg ik u graag.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Specification change", "taal": "FR", "onderwerp": "Modification de la spécification produit", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous informons que la spécification {du produit suivant|des produits suivants} est modifiée :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Je vous transmets volontiers {la nouvelle fiche|les nouvelles fiches} de spécification.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Specification change", "taal": "EN", "onderwerp": "Change in product specification", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would like to inform you that the specification of the following {product|products} is changing:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>I will gladly send you the new specification {sheet|sheets}.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Packaging change", "taal": "NL", "onderwerp": "Wijziging verpakking", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Hierbij laten wij u weten dat de verpakking van {het volgende product|de volgende producten} wijzigt:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>De details van de nieuwe verpakking bezorg ik u graag.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Packaging change", "taal": "FR", "onderwerp": "Modification de l'emballage", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Nous vous informons que l'emballage {du produit suivant|des produits suivants} est modifié :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Je vous transmets volontiers les détails du nouvel emballage.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Packaging change", "taal": "EN", "onderwerp": "Change in packaging", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>We would like to inform you that the packaging of the following {product|products} is changing:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>I will gladly send you the details of the new packaging.\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}, {"reden": "Propose alternative product", "taal": "NL", "onderwerp": "Voorstel {alternatief product|alternatieve producten}", "tekst": "\u003cp>Beste {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Omwille van een rationalisatie van ons gamma willen wij u graag {een alternatief|alternatieven} voorstellen voor {het onderstaande product dat|de onderstaande producten die} wij u momenteel leveren:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{producten}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>In bijlage vindt u de bijhorende documenten.\u003c/p>\u003cp>Zullen wij u een staal of een offerte bezorgen?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Met vriendelijke groeten,\u003c/p>\u003cp>{verzender}\u003c/p>"}, {"reden": "Propose alternative product", "taal": "FR", "onderwerp": "Proposition {de produit alternatif|de produits alternatifs}", "tekst": "\u003cp>Cher/Chère {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Dans le cadre d'une rationalisation de notre gamme, nous souhaitons vous proposer {une alternative au produit mentionné|des alternatives aux produits mentionnés} ci-dessous, que nous vous fournissons actuellement :\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{produits}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Vous trouverez les documents correspondants en pièce jointe.\u003c/p>\u003cp>Souhaitez-vous que nous vous transmettions un échantillon ou un devis ?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Bien cordialement,\u003c/p>\u003cp>{expéditeur}\u003c/p>"}, {"reden": "Propose alternative product", "taal": "EN", "onderwerp": "Alternative {product|products} proposal", "tekst": "\u003cp>Dear {contact},\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>As part of a rationalisation of our product range, we would like to propose {an alternative for the product|alternatives for the products} listed below, which we currently supply to you:\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>{products}\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Please find the relevant documents attached.\u003c/p>\u003cp>Would you like us to provide a sample or a quote?\u003c/p>\u003cp>\u003cbr>\u003c/p>\u003cp>Kind regards,\u003c/p>\u003cp>{sender}\u003c/p>"}], "nieuw": [], "historiek": {}}
 </script>
 <script>
+const ORIGINEEL = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;   // pagina zoals geladen (reserve: download)
 const OPSLAG = "mailsjablonen_excel";            // contacten
 const HAND = "mailsjablonen_handtekening_html";
 const leeg = () => ({ contacten: [], bestandContacten: "" });
@@ -252,13 +254,18 @@ const TEKST = {
   "naamloos": "(nieuwe tekst)",
   "onderwerp": "Onderwerp",
   "tekstLabel": "Tekst",
-  "origineel": "↩︎ origineel",
+  "origineel": "↩︎ vorige versie",
   "tekstWeg": "🗑 Deze tekst verwijderen",
   "tekstWegVraag": "Deze tekst verwijderen (alle talen)?",
-  "tekstNiet": "Onthouden lukt niet in deze browser: je wijziging geldt alleen tot je de pagina sluit.",
+  "tekstNiet": "Onthouden in deze browser lukt niet.",
   "opslaan": "💾 Wijzigingen opslaan",
   "opgeslagen": "✅ Opgeslagen",
-  "nietOpgeslagenVraag": "Je wijzigingen aan de tekst zijn nog niet opgeslagen. Nu opslaan?\n\nOK = opslaan\nAnnuleren = wijzigingen weggooien"
+  "nietOpgeslagenVraag": "Je wijzigingen aan de tekst zijn nog niet opgeslagen. Nu opslaan?\n\nOK = opslaan\nAnnuleren = wijzigingen weggooien",
+  "opgeslagenIn": "✅ Opgeslagen in {naam}",
+  "geenFormulier": "\"{naam}\" is niet dit formulier (of een oudere versie). Er is niets opgeslagen. Kies het formulier dat je nu open hebt.",
+  "geenToestemming": "Geen toestemming om het formulier aan te passen. Er is niets opgeslagen.",
+  "schrijfFout": "Opslaan in het formulier is mislukt: {fout}",
+  "downloadUitleg": "Deze browser kan het formulier niet zelf aanpassen. Er is een nieuw formulier gedownload: vervang je oude bestand door dit bestand. Tot dan blijven je wijzigingen in deze browser bewaard."
  },
  "en": {
   "s1": "1. Load contacts",
@@ -326,13 +333,18 @@ const TEKST = {
   "naamloos": "(new text)",
   "onderwerp": "Subject",
   "tekstLabel": "Text",
-  "origineel": "↩︎ original",
+  "origineel": "↩︎ previous version",
   "tekstWeg": "🗑 Delete this text",
   "tekstWegVraag": "Delete this text (all languages)?",
-  "tekstNiet": "This browser cannot save it: your change only lasts until you close the page.",
+  "tekstNiet": "This browser cannot remember it.",
   "opslaan": "💾 Save changes",
   "opgeslagen": "✅ Saved",
-  "nietOpgeslagenVraag": "Your changes to the text have not been saved yet. Save them now?\n\nOK = save\nCancel = discard changes"
+  "nietOpgeslagenVraag": "Your changes to the text have not been saved yet. Save them now?\n\nOK = save\nCancel = discard changes",
+  "opgeslagenIn": "✅ Saved in {naam}",
+  "geenFormulier": "\"{naam}\" is not this form (or an older version). Nothing was saved. Choose the form you have open now.",
+  "geenToestemming": "No permission to change the form. Nothing was saved.",
+  "schrijfFout": "Saving in the form failed: {fout}",
+  "downloadUitleg": "This browser cannot change the form itself. A new form has been downloaded: replace your old file with this file. Until then your changes are kept in this browser."
  },
  "fr": {
   "s1": "1. Charger les contacts",
@@ -400,13 +412,18 @@ const TEKST = {
   "naamloos": "(nouveau texte)",
   "onderwerp": "Objet",
   "tekstLabel": "Texte",
-  "origineel": "↩︎ original",
+  "origineel": "↩︎ version précédente",
   "tekstWeg": "🗑 Supprimer ce texte",
   "tekstWegVraag": "Supprimer ce texte (toutes les langues) ?",
-  "tekstNiet": "Ce navigateur ne peut pas l'enregistrer : votre modification ne dure que jusqu'à la fermeture de la page.",
+  "tekstNiet": "Ce navigateur ne peut pas le retenir.",
   "opslaan": "💾 Enregistrer les modifications",
   "opgeslagen": "✅ Enregistré",
-  "nietOpgeslagenVraag": "Vos modifications du texte ne sont pas encore enregistrées. Les enregistrer maintenant ?\n\nOK = enregistrer\nAnnuler = abandonner les modifications"
+  "nietOpgeslagenVraag": "Vos modifications du texte ne sont pas encore enregistrées. Les enregistrer maintenant ?\n\nOK = enregistrer\nAnnuler = abandonner les modifications",
+  "opgeslagenIn": "✅ Enregistré dans {naam}",
+  "geenFormulier": "« {naam} » n'est pas ce formulaire (ou une version plus ancienne). Rien n'a été enregistré. Choisissez le formulaire que vous avez ouvert.",
+  "geenToestemming": "Pas d'autorisation pour modifier le formulaire. Rien n'a été enregistré.",
+  "schrijfFout": "L'enregistrement dans le formulaire a échoué : {fout}",
+  "downloadUitleg": "Ce navigateur ne peut pas modifier le formulaire lui-même. Un nouveau formulaire a été téléchargé : remplacez votre ancien fichier par celui-ci. En attendant, vos modifications restent dans ce navigateur."
  }
 };
 const TAAL_OPSLAG = "mailsjablonen_taal";   // gedeeld door beide pagina's
@@ -880,68 +897,46 @@ $("resultaten").addEventListener("click", e => {
   if (e.target.id === "alles") klaar.filter(m => m.tekst === undefined).forEach((m, i) => setTimeout(() => download(m.bestandsnaam, m.maak()), i * 500));
 });
 
-/* ---------- Stap 3: reden en tekst ----------
-   Standaardteksten: het blok <script type="application/json" id="standaard"> bovenaan.
-   Eigen aanpassingen: apart onthouden per reden en taal. Wat je niet aanpast, volgt altijd de standaardtekst. */
-const STANDAARD = (() => {
-  try {
-    const s = JSON.parse($("standaard").textContent);
-    if (!Array.isArray(s.teksten)) throw new Error("geen lijst met teksten");
-    return s.teksten;
-  } catch (err) { console.error("Ingebouwde teksten konden niet gelezen worden:", err); return []; }
-})();
-const TEKST_OPSLAG = "mailsjablonen_teksten", NIEUW = "__nieuw__";
-/* eigen = { teksten: { "reden|TAAL": { onderwerp, tekst } }, nieuw: [codes van zelf toegevoegde teksten] } */
-let eigen = (() => {
-  try {
-    const o = JSON.parse(localStorage.getItem(TEKST_OPSLAG) || "null");
-    if (o && o.teksten && typeof o.teksten === "object" && Array.isArray(o.nieuw))
-      return { teksten: Object.assign(Object.create(null), o.teksten), nieuw: o.nieuw.filter(x => typeof x === "string") };
-  } catch (err) { console.warn("Aangepaste teksten konden niet gelezen worden:", err); }
-  return { teksten: Object.create(null), nieuw: [] };
-})();
-function bewaarEigen() {
-  try { localStorage.setItem(TEKST_OPSLAG, JSON.stringify(eigen)); $("tekstinfo").textContent = ""; }
-  catch (err) { console.error("Aangepaste tekst onthouden mislukt:", err); $("tekstinfo").innerHTML = foutHtml([T("tekstNiet")]); }
+/* ---------- Stap 4: reden en tekst ----------
+   De teksten staan in het gegevensblok "standaard" bovenaan dit bestand:
+   { teksten: [{ reden, taal, onderwerp, tekst }], nieuw: [zelf toegevoegde redenen], historiek: { "reden|TAAL": [oudere versies] } }
+   "Wijzigingen opslaan" schrijft dat blok opnieuw in het HTML-bestand zelf (Chrome/Edge),
+   of downloadt een nieuw formulier (andere browsers). */
+const NIEUW = "__nieuw__", MAX_VERSIES = 5, MERK = '<meta name="generator" content="mailsjablonen-automatisch">';
+const TEKST_OPSLAG = "mailsjablonen_teksten";   // reserve: wijzigingen die nog niet in het bestand staan
+function leesBlok(json) {
+  const d = JSON.parse(json);
+  if (!d || !Array.isArray(d.teksten)) throw new Error("geen lijst met teksten");
+  return { teksten: d.teksten.filter(t => t && typeof t.reden === "string" && typeof t.taal === "string").map(t => ({ reden: t.reden, taal: t.taal, onderwerp: String(t.onderwerp || ""), tekst: String(t.tekst || "") })),
+           nieuw: Array.isArray(d.nieuw) ? d.nieuw.filter(x => typeof x === "string") : [],
+           historiek: Object.assign(Object.create(null), d.historiek && typeof d.historiek === "object" ? d.historiek : {}) };
 }
-const standaardVan = (r, x) => STANDAARD.find(t => t.reden === r && t.taal === x);
-/* concept = wijzigingen op het scherm die nog niet opgeslagen zijn: { "reden|TAAL": { onderwerp, tekst } } */
-let concept = Object.create(null);
-/* Opgeslagen tekst voor reden r in taal x: eigen aanpassing, anders de standaardtekst */
-function opgeslagenVan(r, x) {
-  if (Object.hasOwn(eigen.teksten, r + "|" + x)) return eigen.teksten[r + "|" + x];
-  const s = standaardVan(r, x);
-  return s ? { onderwerp: s.onderwerp, tekst: s.tekst } : null;
-}
+const blokTekst = d => JSON.stringify({ teksten: d.teksten, nieuw: d.nieuw, historiek: d.historiek }).replace(/</g, "\\u003c");   // geen "<": kan het blok nooit afsluiten
+let bestand;
+try { bestand = leesBlok($("standaard").textContent); }
+catch (err) { console.error("Teksten in het formulier konden niet gelezen worden:", err); bestand = { teksten: [], nieuw: [], historiek: Object.create(null) }; }
+
+/* Werktoestand (nog niet opgeslagen) */
+let concept = Object.create(null);   // "reden|TAAL" -> { onderwerp, tekst }
+let terug = Object.create(null);     // "reden|TAAL" -> hoeveel versies terug er nu op het scherm staat
+let werkNieuw = [];                  // nieuwe redenen, nog niet opgeslagen
+let weg = new Set();                 // zelf toegevoegde redenen om te verwijderen bij opslaan
+
+const zoek = (d, r, x) => d.teksten.find(t => t.reden === r && t.taal === x);
+function opgeslagenVan(r, x) { const t = zoek(bestand, r, x); return t ? { onderwerp: t.onderwerp, tekst: t.tekst } : null; }
 /* Tekst zoals op het scherm: niet-opgeslagen wijziging, anders de opgeslagen tekst (ook gebruikt voor de mails) */
-function tekstVan(r, x) {
-  return Object.hasOwn(concept, r + "|" + x) ? concept[r + "|" + x] : opgeslagenVan(r, x);
-}
+function tekstVan(r, x) { return Object.hasOwn(concept, r + "|" + x) ? concept[r + "|" + x] : opgeslagenVan(r, x); }
+const versiesVan = (r, x) => Array.isArray(bestand.historiek[r + "|" + x]) ? bestand.historiek[r + "|" + x] : [];
 const gelijk = (a, b) => String(a).replace(/\s+/g, " ").trim() === String(b).replace(/\s+/g, " ").trim();
 const gelijkeTekst = (a, b) => !!a && !!b && gelijk(a.onderwerp, b.onderwerp) && gelijk(a.tekst, b.tekst);
-/* "↩︎ origineel" alleen als de tekst op het scherm verschilt van de standaardtekst */
-function syncOrig(x) {
-  const r = $("reden").value, s = standaardVan(r, x);
-  $("orig" + x).hidden = !s || gelijkeTekst(tekstVan(r, x), s);
-}
-const heeftConcept = () => Object.keys(concept).length > 0;
-function syncOpslaan() { $("opslaan").hidden = !heeftConcept(); }
-/* Niet-opgeslagen wijzigingen bewaren. Gelijk aan de standaardtekst? Dan is er geen eigen aanpassing meer nodig. */
-function slaOp() {
-  Object.entries(concept).forEach(([sleutel, t]) => {
-    const [r, x] = sleutel.split("|"), s = standaardVan(r, x);
-    if (s && gelijkeTekst(t, s)) delete eigen.teksten[sleutel];
-    else eigen.teksten[sleutel] = t;
-  });
-  concept = Object.create(null);
-  bewaarEigen(); syncOpslaan();
-}
+const leegTekst = t => !t || (!String(t.onderwerp).trim() && !t.tekst);
 /* Alleen bruikbaar als onderwerp en tekst ingevuld zijn */
 function bruikbaar(r, x) {
   const t = tekstVan(r, x);
   return t && String(t.onderwerp).trim() && t.tekst && htmlNaarTekst(t.tekst).trim() ? { onderwerp: String(t.onderwerp).trim(), tekst: t.tekst } : null;
 }
-const redenen = () => [...new Set(STANDAARD.map(t => t.reden)), ...eigen.nieuw];
+const isEigen = r => bestand.nieuw.includes(r) || werkNieuw.includes(r);
+const redenen = () => [...new Set([...bestand.teksten.map(t => t.reden), ...bestand.nieuw, ...werkNieuw])].filter(r => !weg.has(r));
 /* Naam in de keuzelijst = het onderwerp in de taal van de pagina (anders NL, FR of EN) */
 function redenNaam(r) {
   const t = [taal.toUpperCase(), ...TALEN].map(x => tekstVan(r, x)).find(t => t && String(t.onderwerp).trim());
@@ -964,66 +959,181 @@ function leesTekst(x) {
     .replace(/<p([^>]*)><\/p>/g, "<p$1><br></p>");   // lege regel zichtbaar houden in Outlook
   return DOMPurify.sanitize(html, { FORBID_TAGS: ["style", "form", "input", "button", "textarea", "select"], ALLOW_DATA_ATTR: false });
 }
-/* Velden van taal x vullen voor de gekozen reden */
+/* Knoppen tonen of verbergen */
+const heeftWijzigingen = () => Object.keys(concept).length > 0 || weg.size > 0 || werkNieuw.some(r => TALEN.some(x => Object.hasOwn(concept, r + "|" + x)));
+function syncKnoppen() {
+  const r = $("reden").value;
+  TALEN.forEach(x => {
+    const k = r + "|" + x;
+    $("orig" + x).hidden = !((Object.hasOwn(concept, k) && !terug[k]) || versiesVan(r, x).length > (terug[k] || 0));
+  });
+  $("opslaan").hidden = !heeftWijzigingen();
+  $("tekstWeg").hidden = !isEigen(r);
+}
 function toonTekst(x) {
-  const r = $("reden").value, t = tekstVan(r, x);
+  const t = tekstVan($("reden").value, x);
   $("onderwerp" + x).value = t ? t.onderwerp : "";
   zetTekst(x, t ? t.tekst : "");
-  syncOrig(x);
 }
-function toonTeksten() {
-  TALEN.forEach(toonTekst);
-  $("tekstWeg").hidden = !eigen.nieuw.includes($("reden").value);
-  syncOpslaan();
-}
-/* Gebruiker past iets aan: als niet-opgeslagen wijziging bijhouden (knop "Wijzigingen opslaan" verschijnt).
-   Weer gelijk aan de opgeslagen tekst? Dan is er niets meer op te slaan. */
+function toonTeksten() { TALEN.forEach(toonTekst); syncKnoppen(); }
+/* Gebruiker past iets aan: als niet-opgeslagen wijziging bijhouden. Weer gelijk aan de opgeslagen tekst? Dan niets op te slaan. */
 function wijzig(x) {
-  const r = $("reden").value, sleutel = r + "|" + x;
+  const r = $("reden").value, k = r + "|" + x;
   const t = { onderwerp: $("onderwerp" + x).value, tekst: leesTekst(x) };
   const o = opgeslagenVan(r, x);
-  if (gelijkeTekst(t, o) || (!o && !t.onderwerp.trim() && !t.tekst)) delete concept[sleutel];
-  else concept[sleutel] = t;
+  delete terug[k];
+  if (gelijkeTekst(t, o) || (!o && leegTekst(t))) delete concept[k];
+  else concept[k] = t;
   $("tekstinfo").textContent = "";
-  syncOrig(x); syncOpslaan();
-  vulRedenen();   // de naam in de keuzelijst is het onderwerp
+  syncKnoppen(); vulRedenen();   // de naam in de keuzelijst is het onderwerp
 }
-$("opslaan").addEventListener("click", () => {
-  slaOp(); vulRedenen();
-  $("tekstinfo").innerHTML = `<span class="ok">${esc(T("opgeslagen"))}</span>`;
+/* "↩︎ vorige versie": eerst niet-opgeslagen wijzigingen weggooien, daarna telkens één opgeslagen versie verder terug */
+function vorigeVersie(x) {
+  const r = $("reden").value, k = r + "|" + x, versies = versiesVan(r, x);
+  if (Object.hasOwn(concept, k) && !terug[k]) delete concept[k];
+  else {
+    const n = (terug[k] || 0) + 1;
+    if (n > versies.length) return;
+    concept[k] = { ...versies[versies.length - n] }; terug[k] = n;
+    if (gelijkeTekst(concept[k], opgeslagenVan(r, x))) delete concept[k];
+  }
+  toonTekst(x); $("tekstinfo").textContent = "";
+  syncKnoppen(); vulRedenen();
+}
+
+/* ---------- Opslaan ---------- */
+/* Wijzigingen toepassen op de teksten van een formulier. De vorige tekst gaat naar de historiek (max. 5 versies). */
+function pasToe(d) {
+  Object.entries(concept).forEach(([k, t]) => {
+    const [r, x] = k.split("|"), oud = zoek(d, r, x);
+    if (oud && !gelijkeTekst(oud, t)) d.historiek[k] = [...(Array.isArray(d.historiek[k]) ? d.historiek[k] : []), { onderwerp: oud.onderwerp, tekst: oud.tekst }].slice(-MAX_VERSIES);
+    if (oud) { oud.onderwerp = t.onderwerp; oud.tekst = t.tekst; }
+    else d.teksten.push({ reden: r, taal: x, onderwerp: t.onderwerp, tekst: t.tekst });
+  });
+  werkNieuw.forEach(r => { if (!d.nieuw.includes(r) && !weg.has(r)) d.nieuw.push(r); });
+  weg.forEach(r => {
+    d.teksten = d.teksten.filter(t => t.reden !== r);
+    d.nieuw = d.nieuw.filter(x => x !== r);
+    TALEN.forEach(x => { delete d.historiek[r + "|" + x]; });
+  });
+  return d;
+}
+function wisWerk() { concept = Object.create(null); terug = Object.create(null); werkNieuw = []; weg = new Set(); }
+/* Reserve in de browser: wijzigingen die (nog) niet in het bestand staan */
+function bewaarReserve(r) {
+  try { if (r) localStorage.setItem(TEKST_OPSLAG, JSON.stringify(r)); else localStorage.removeItem(TEKST_OPSLAG); }
+  catch (err) { console.error("Reserve in de browser mislukt:", err); $("tekstinfo").insertAdjacentHTML("beforeend", foutHtml([T("tekstNiet")])); }
+}
+/* Bestand onthouden tussen sessies (IndexedDB kan een bestandsverwijzing bewaren, localStorage niet) */
+function db() {
+  return new Promise((ok, fout) => {
+    const r = indexedDB.open("mailsjablonen", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("kv");
+    r.onsuccess = () => ok(r.result); r.onerror = () => fout(r.error);
+  });
+}
+async function dbDoe(modus, actie) {
+  const d = await db();
+  return new Promise((ok, fout) => {
+    const r = actie(d.transaction("kv", modus).objectStore("kv"));
+    r.onsuccess = () => ok(r.result); r.onerror = () => fout(r.error);
+  });
+}
+// Het kenmerk van het gegevensblok wordt in stukjes opgebouwd, zodat het maar één keer letterlijk in het bestand staat.
+const BLOK_ID = 'id="' + 'standaard">';
+const BLOK = new RegExp('(<script type="application/json" ' + BLOK_ID + '\\n?)([\\s\\S]*?)(\\n?<' + '/script>)');   // "<" + "/script>": anders eindigt dit script hier
+async function opslaanInBestand() {
+  let h = null;
+  try { h = await dbDoe("readonly", s => s.get("formulier")); }
+  catch (err) { console.warn("Gekozen formulier kon niet gelezen worden:", err); }
+  if (!h) [h] = await window.showOpenFilePicker({ types: [{ description: "HTML", accept: { "text/html": [".html", ".htm"] } }] });
+  if (await h.queryPermission({ mode: "readwrite" }) !== "granted" && await h.requestPermission({ mode: "readwrite" }) !== "granted")
+    throw Object.assign(new Error(T("geenToestemming")), { gebruiker: true });
+  const inhoud = await (await h.getFile()).text();
+  const m = inhoud.match(BLOK);
+  if (!m || !inhoud.includes(MERK) || inhoud.split(BLOK_ID).length !== 2) {
+    await dbDoe("readwrite", s => s.delete("formulier")).catch(err => console.warn("Vergeten mislukt:", err));
+    throw Object.assign(new Error(T("geenFormulier", { naam: h.name })), { gebruiker: true });
+  }
+  // Teksten zoals ze NU in het bestand staan (misschien heeft een collega intussen iets opgeslagen), daarop onze wijzigingen
+  const nieuw = pasToe(leesBlok(m[2]));
+  const schrijver = await h.createWritable();
+  await schrijver.write(inhoud.replace(BLOK, (x, voor, oud, na) => voor + blokTekst(nieuw) + na));
+  await schrijver.close();
+  await dbDoe("readwrite", s => s.put(h, "formulier")).catch(err => console.warn("Formulier onthouden mislukt:", err));
+  return { naam: h.name, d: nieuw };
+}
+/* Andere browsers: nieuw formulier downloaden met de teksten erin */
+function downloadFormulier() {
+  const d = pasToe(leesBlok(blokTekst(bestand)));   // kopie van de huidige teksten + wijzigingen
+  const doc = new DOMParser().parseFromString(ORIGINEEL, "text/html");
+  doc.getElementById("standaard").textContent = "\n" + blokTekst(d) + "\n";
+  download("mailsjablonen-automatisch.html", ["<!DOCTYPE html>\n" + doc.documentElement.outerHTML], "text/html");
+  return d;
+}
+$("opslaan").addEventListener("click", async () => {
+  const knop = $("opslaan"); knop.disabled = true;
+  try {
+    if ("showOpenFilePicker" in window) {
+      const { naam, d } = await opslaanInBestand();
+      bestand = d; wisWerk(); bewaarReserve(null);
+      $("tekstinfo").innerHTML = `<span class="ok">${esc(T("opgeslagenIn", { naam }))}</span>`;
+    } else {
+      const reserve = { teksten: { ...concept }, nieuw: [...werkNieuw] };
+      bestand = downloadFormulier(); wisWerk(); bewaarReserve(reserve);
+      $("tekstinfo").innerHTML = `<div class="tip">${esc(T("downloadUitleg"))}</div>`;
+    }
+  } catch (err) {
+    if (err.name === "AbortError") return;   // venster gesloten zonder te kiezen: niets gebeurd
+    if (err.gebruiker) console.warn("Opslaan geweigerd:", err.message); else console.error("Opslaan mislukt:", err);
+    $("tekstinfo").innerHTML = foutHtml([err.gebruiker ? err.message : T("schrijfFout", { fout: err.message })]);
+  } finally { knop.disabled = false; vulRedenen(); toonTeksten(); }
 });
 /* Pagina sluiten met niet-opgeslagen wijzigingen: de browser vraagt of je de pagina echt wilt verlaten */
-window.addEventListener("beforeunload", e => { if (heeftConcept()) e.preventDefault(); });
+window.addEventListener("beforeunload", e => { if (heeftWijzigingen()) e.preventDefault(); });
+
+/* Wijzigingen uit de browser (vroegere versie of reserve) die nog niet in het bestand staan: als niet-opgeslagen tonen */
+(() => {
+  try {
+    const o = JSON.parse(localStorage.getItem(TEKST_OPSLAG) || "null");
+    if (!o || typeof o !== "object") return;
+    if (Array.isArray(o.nieuw)) o.nieuw.forEach(r => { if (typeof r === "string" && !bestand.nieuw.includes(r) && !werkNieuw.includes(r)) werkNieuw.push(r); });
+    Object.entries(o.teksten && typeof o.teksten === "object" ? o.teksten : {}).forEach(([k, t]) => {
+      const [r, x] = k.split("|");
+      if (!t || !TALEN.includes(x)) return;
+      const n = { onderwerp: String(t.onderwerp || ""), tekst: String(t.tekst || "") };
+      if (!gelijkeTekst(n, opgeslagenVan(r, x))) concept[k] = n;
+    });
+    if (!heeftWijzigingen()) bewaarReserve(null);   // alles staat al in het bestand
+  } catch (err) { console.warn("Aangepaste teksten uit de browser konden niet gelezen worden:", err); }
+})();
+
 TALEN.forEach(x => {
   editors[x] = new Quill("#tekst" + x, { theme: "snow", modules: { toolbar: KNOPPEN } });
   editors[x].on("text-change", (d, o, bron) => { if (bron === "user") wijzig(x); });
   $("onderwerp" + x).addEventListener("input", () => wijzig(x));
-  $("orig" + x).addEventListener("click", () => {   // standaardtekst terug in de velden; opslaan blijft nodig
-    const s = standaardVan($("reden").value, x); if (!s) return;
-    $("onderwerp" + x).value = s.onderwerp; zetTekst(x, s.tekst);
-    wijzig(x);
-  });
+  $("orig" + x).addEventListener("click", () => vorigeVersie(x));
 });
-$("reden").addEventListener("change", () => {
-  if (heeftConcept()) {                       // eerst vragen wat er met niet-opgeslagen wijzigingen moet gebeuren
-    const gekozen = $("reden").value;
-    if (window.confirm(T("nietOpgeslagenVraag"))) slaOp();
-    else concept = Object.create(null);
-    vulRedenen(); $("reden").value = gekozen;
+$("reden").addEventListener("change", async () => {
+  const gekozen = $("reden").value;
+  if (heeftWijzigingen()) {                   // eerst vragen wat er met niet-opgeslagen wijzigingen moet gebeuren
+    if (window.confirm(T("nietOpgeslagenVraag"))) { $("opslaan").click(); }
+    else { wisWerk(); bewaarReserve(null); }
   }
-  if ($("reden").value === NIEUW) {          // nieuwe tekst: lege velden met een eigen code
+  if (gekozen === NIEUW) {                    // nieuwe tekst: lege velden met een eigen code
     const code = "r" + Date.now().toString(36);
-    eigen.nieuw.push(code); bewaarEigen();
+    werkNieuw.push(code);
     vulRedenen(); $("reden").value = code;
-  }
+  } else { vulRedenen(); if (redenen().includes(gekozen)) $("reden").value = gekozen; }
   toonTeksten(); opnieuw();
 });
 $("tekstWeg").addEventListener("click", () => {
   const r = $("reden").value;
-  if (!eigen.nieuw.includes(r) || !window.confirm(T("tekstWegVraag"))) return;
-  eigen.nieuw = eigen.nieuw.filter(x => x !== r);
-  TALEN.forEach(x => { delete eigen.teksten[r + "|" + x]; delete concept[r + "|" + x]; });
-  bewaarEigen(); vulRedenen(); toonTeksten(); opnieuw();
+  if (!isEigen(r) || !window.confirm(T("tekstWegVraag"))) return;
+  if (werkNieuw.includes(r)) werkNieuw = werkNieuw.filter(x => x !== r);   // nog nooit opgeslagen: gewoon weg
+  else weg.add(r);                                                         // wordt verwijderd bij opslaan
+  TALEN.forEach(x => { delete concept[r + "|" + x]; delete terug[r + "|" + x]; });
+  vulRedenen(); toonTeksten(); opnieuw();
 });
 /* klantnummer -> contact */
 function contactIndex() {
