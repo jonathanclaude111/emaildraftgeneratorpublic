@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-ZtfpnE3nVGhnVmSimEm++8T8eazgyCbHQ+ifIR8LfKw='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-tHUYnK4AScBCkWAm47ISs0au6/zldtO0oNv/SJh+qHI='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -76,6 +76,10 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  .ql-toolbar.ql-snow{margin-top:4px;background:#fff;border-radius:5px 5px 0 0}
  .ql-container.ql-snow{font-family:Calibri,Carlito,sans-serif;font-size:11pt;background:#fff;border-radius:0 0 5px 5px}
  .ql-editor{min-height:150px}
+ .codes{font-size:.82rem;color:#8A979D;margin:6px 0 0}
+ /* Gewone mail: tekst blijft aanpasbaar, maar zonder opmaakknoppen */
+ .zonderOpmaak .ql-toolbar{display:none}
+ .zonderOpmaak .ql-container.ql-snow{border-top:1px solid #ccc;border-radius:5px;margin-top:4px}
  .inhoud p{margin:0} .inhoud ul,.inhoud ol{margin:0;padding-left:24px}
  .pj{font-size:.88rem;color:#5B6B73;margin-top:8px}
  .talen{float:right;display:flex;gap:4px;margin-top:4px}
@@ -105,10 +109,25 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
 </section>
 
 <section>
- <h2 data-t="s3">3. Reden en tekst</h2>
+ <h2 data-t="s3" id="s3kop">3. Formaat</h2>
+ <div class="modus" role="group" aria-labelledby="s3kop">
+  <button type="button" data-modus="tekst" data-t="modTekst">✉️ Gewone mail</button>
+  <button type="button" data-modus="opmaak" data-t="modOpmaak">🎨 Met opmaak</button>
+  <button type="button" data-modus="bijlagen" data-t="modBijlagen">📎 Met bijlagen</button>
+ </div>
+ <p class="status" id="modusUitleg"></p>
+ <input type="file" id="bestanden" multiple hidden>
+ <div id="bijlagenblok" hidden>
+  <div id="bijlagenlijst" class="status"></div>
+  <button type="button" class="licht klein" id="meerBijlagen" data-t="meerBijlagen">📎 Bijlage toevoegen</button>
+ </div>
+</section>
+
+<section id="tekstsectie">
+ <h2 data-t="s4">4. Reden en tekst</h2>
  <label for="reden" data-t="reden">Reden</label>
  <select id="reden"></select>
- <p class="status" data-t="tekstUitleg"></p>
+ <p class="status codes" data-t="codesRegel"></p>
  <p class="status" id="talenInfo" data-t="talenFilter" hidden></p>
  <div class="taalblok" id="blokNL">
   <div class="blokkop"><span class="taal">NL</span> <b data-t="taalNL"></b> <button type="button" class="licht klein" id="origNL" data-t="origineel" hidden>↩︎ origineel</button></div>
@@ -127,21 +146,6 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
  </div>
  <div class="status" id="tekstinfo"></div>
  <button type="button" class="licht klein" id="tekstWeg" data-t="tekstWeg" hidden>🗑 Deze tekst verwijderen</button>
-</section>
-
-<section>
- <h2 data-t="s4" id="s4kop">4. Formaat</h2>
- <div class="modus" role="group" aria-labelledby="s4kop">
-  <button type="button" data-modus="tekst" data-t="modTekst">✉️ Gewone mail</button>
-  <button type="button" data-modus="opmaak" data-t="modOpmaak">🎨 Met opmaak</button>
-  <button type="button" data-modus="bijlagen" data-t="modBijlagen">📎 Met bijlagen</button>
- </div>
- <p class="status" id="modusUitleg"></p>
- <input type="file" id="bestanden" multiple hidden>
- <div id="bijlagenblok" hidden>
-  <div id="bijlagenlijst" class="status"></div>
-  <button type="button" class="licht klein" id="meerBijlagen" data-t="meerBijlagen">📎 Bijlage toevoegen</button>
- </div>
 </section>
 
 <section>
@@ -213,14 +217,14 @@ const TEKST = {
   "klantOnbekend": "Klant {nr} ({naam}) staat niet in tabblad Contacts.",
   "ongeldigEmail": "Klant {nr} ({naam}): ongeldig e-mailadres \"{email}\" in tabblad Contacts.",
   "geenEmail": "Klant {nr} ({naam}): geen e-mailadres in tabblad Contacts.",
-  "geenTekst": "Geen tekst voor \"{reden}\" in taal {taal} of NL. Vul onderwerp en tekst in bij stap 3.",
+  "geenTekst": "Geen tekst voor \"{reden}\" in taal {taal} of NL. Vul onderwerp en tekst in bij stap 4.",
   "aan": "Aan:",
   "handNiet": "Onthouden lukt niet in deze browser. Plak je handtekening de volgende keer opnieuw.",
   "titel": "Mailsjablonen",
   "uitleg": "Plak klanten en producten uit Excel en kies een reden. Voor elke klant staat een mail klaar in zijn eigen taal. Zonder bijlagen opent de mail meteen in Outlook; met bijlagen maakt de tool automatisch een Outlook-bestand (.eml).",
   "plakPh": "Klantnr | Klantnaam | Productcode | Productnaam",
   "s2": "2. Klanten en producten",
-  "s3": "3. Reden en tekst",
+  "s3": "3. Formaat",
   "handModusEml": "Outlook-bestand (.eml): plak hier je handtekening met opmaak.",
   "modTekst": "✉️ Gewone mail",
   "modOpmaak": "🎨 Met opmaak",
@@ -232,7 +236,7 @@ const TEKST = {
   "handUitleg": "Kopieer je handtekening in Outlook (bv. uit een verzonden mail of het handtekeningvenster) en plak ze hier. Kleur, vet en links blijven behouden. De browser onthoudt ze.",
   "handGroet": "Let op: de slotgroet (bv. \"Met vriendelijke groeten,\") staat al in de mailtekst. Plak hier dus enkel je naam en gegevens, zonder slotgroet.",
   "handLeeg": "Plak hier je handtekening",
-  "s4": "4. Formaat",
+  "s4": "4. Reden en tekst",
   "handTekstUitleg": "Typ of plak je handtekening als gewone tekst: een mail die meteen in Outlook opent, kent geen opmaak. De browser onthoudt ze.",
   "handPh": "Jonathan\nCustomer Service\n+32 ...",
   "openOutlook": "Openen in Outlook",
@@ -244,7 +248,6 @@ const TEKST = {
   "alles": "Alle {n} mails downloaden",
   "s1Uitleg": "Kies je contactenbestand (Excel). Het wordt onthouden in deze browser.",
   "s6": "6. Nalezen en versturen",
-  "tekstUitleg": "Pas onderwerp en tekst gerust aan: je wijziging wordt meteen onthouden in deze browser. \"↩︎ origineel\" zet de standaardtekst terug. Codes: {contact}, {bedrijf}, {producten}, {verzender}, Cher/Chère en {enkelvoud|meervoud}. Opmaak (vet, kleur, lijstjes, links) gaat mee bij 🎨 en 📎; bij ✉️ Gewone mail wordt het gewone tekst.",
   "talenFilter": "Je ziet alleen de talen van je geplakte klanten.",
   "nieuweTekst": "➕ Nieuwe tekst",
   "naamloos": "(nieuwe tekst)",
@@ -253,7 +256,8 @@ const TEKST = {
   "origineel": "↩︎ origineel",
   "tekstWeg": "🗑 Deze tekst verwijderen",
   "tekstWegVraag": "Deze tekst verwijderen (alle talen)?",
-  "tekstNiet": "Onthouden lukt niet in deze browser: je wijziging geldt alleen tot je de pagina sluit."
+  "tekstNiet": "Onthouden lukt niet in deze browser: je wijziging geldt alleen tot je de pagina sluit.",
+  "codesRegel": "Codes: {contact}, {bedrijf}, {producten}, {verzender}, Cher/Chère, {enkelvoud|meervoud}"
  },
  "en": {
   "s1": "1. Load contacts",
@@ -285,14 +289,14 @@ const TEKST = {
   "klantOnbekend": "Customer {nr} ({naam}) is not in sheet Contacts.",
   "ongeldigEmail": "Customer {nr} ({naam}): invalid email address \"{email}\" in sheet Contacts.",
   "geenEmail": "Customer {nr} ({naam}): no email address in sheet Contacts.",
-  "geenTekst": "No text for \"{reden}\" in language {taal} or NL. Fill in subject and text in step 3.",
+  "geenTekst": "No text for \"{reden}\" in language {taal} or NL. Fill in subject and text in step 4.",
   "aan": "To:",
   "handNiet": "This browser cannot save it. Paste your signature again next time.",
   "titel": "Email templates",
   "uitleg": "Paste customers and products from Excel and choose a reason. An email is ready for each customer in their own language. Without attachments the email opens straight in Outlook; with attachments the tool automatically creates an Outlook file (.eml).",
   "plakPh": "Customer no. | Customer name | Product code | Product name",
   "s2": "2. Customers and products",
-  "s3": "3. Reason and text",
+  "s3": "3. Format",
   "handModusEml": "Outlook file (.eml): paste your formatted signature here.",
   "modTekst": "✉️ Plain email",
   "modOpmaak": "🎨 With formatting",
@@ -304,7 +308,7 @@ const TEKST = {
   "handUitleg": "Copy your signature in Outlook (e.g. from a sent email or the signature window) and paste it here. Colours, bold and links are kept. The browser remembers it.",
   "handGroet": "Note: the closing (e.g. \"Kind regards,\") is already in the email text. So only paste your name and details here, without a closing.",
   "handLeeg": "Paste your signature here",
-  "s4": "4. Format",
+  "s4": "4. Reason and text",
   "handTekstUitleg": "Type or paste your signature as plain text: an email that opens straight in Outlook has no formatting. The browser remembers it.",
   "handPh": "Jonathan\nCustomer Service\n+32 ...",
   "openOutlook": "Open in Outlook",
@@ -316,7 +320,6 @@ const TEKST = {
   "alles": "Download all {n} emails",
   "s1Uitleg": "Choose your contacts file (Excel). It is remembered in this browser.",
   "s6": "6. Review and send",
-  "tekstUitleg": "Feel free to edit subject and text: your change is remembered in this browser right away. \"↩︎ original\" restores the standard text. Codes: {contact}, {company}, {products}, {sender}, Cher/Chère and {singular|plural}. Formatting (bold, colour, lists, links) is kept with 🎨 and 📎; with ✉️ Plain email it becomes plain text.",
   "talenFilter": "Only the languages of your pasted customers are shown.",
   "nieuweTekst": "➕ New text",
   "naamloos": "(new text)",
@@ -325,7 +328,8 @@ const TEKST = {
   "origineel": "↩︎ original",
   "tekstWeg": "🗑 Delete this text",
   "tekstWegVraag": "Delete this text (all languages)?",
-  "tekstNiet": "This browser cannot save it: your change only lasts until you close the page."
+  "tekstNiet": "This browser cannot save it: your change only lasts until you close the page.",
+  "codesRegel": "Codes: {contact}, {company}, {products}, {sender}, Cher/Chère, {singular|plural}"
  },
  "fr": {
   "s1": "1. Charger les contacts",
@@ -357,14 +361,14 @@ const TEKST = {
   "klantOnbekend": "Le client {nr} ({naam}) ne figure pas dans l'onglet Contacts.",
   "ongeldigEmail": "Client {nr} ({naam}) : adresse e-mail non valide « {email} » dans l'onglet Contacts.",
   "geenEmail": "Client {nr} ({naam}) : pas d'adresse e-mail dans l'onglet Contacts.",
-  "geenTekst": "Aucun texte pour « {reden} » en langue {taal} ou NL. Remplissez l'objet et le texte à l'étape 3.",
+  "geenTekst": "Aucun texte pour « {reden} » en langue {taal} ou NL. Remplissez l'objet et le texte à l'étape 4.",
   "aan": "À :",
   "handNiet": "Ce navigateur ne peut pas l'enregistrer. Collez à nouveau votre signature la prochaine fois.",
   "titel": "Modèles d'e-mails",
   "uitleg": "Collez les clients et produits depuis Excel et choisissez un motif. Un e-mail est prêt pour chaque client dans sa langue. Sans pièce jointe, l'e-mail s'ouvre directement dans Outlook ; avec pièces jointes, l'outil crée automatiquement un fichier Outlook (.eml).",
   "plakPh": "N° client | Nom du client | Code produit | Nom du produit",
   "s2": "2. Clients et produits",
-  "s3": "3. Motif et texte",
+  "s3": "3. Format",
   "handModusEml": "Fichier Outlook (.eml) : collez ici votre signature avec mise en forme.",
   "modTekst": "✉️ E-mail simple",
   "modOpmaak": "🎨 Avec mise en forme",
@@ -376,7 +380,7 @@ const TEKST = {
   "handUitleg": "Copiez votre signature dans Outlook (p. ex. depuis un e-mail envoyé ou la fenêtre des signatures) et collez-la ici. Couleurs, gras et liens sont conservés. Le navigateur la retient.",
   "handGroet": "Attention : la formule de politesse (p. ex. « Bien cordialement, ») figure déjà dans le texte du mail. Collez donc ici uniquement votre nom et vos coordonnées, sans formule de politesse.",
   "handLeeg": "Collez ici votre signature",
-  "s4": "4. Format",
+  "s4": "4. Motif et texte",
   "handTekstUitleg": "Tapez ou collez votre signature en texte simple : un e-mail qui s'ouvre directement dans Outlook n'a pas de mise en forme. Le navigateur la retient.",
   "handPh": "Jonathan\nCustomer Service\n+32 ...",
   "openOutlook": "Ouvrir dans Outlook",
@@ -388,7 +392,6 @@ const TEKST = {
   "alles": "Télécharger les {n} e-mails",
   "s1Uitleg": "Choisissez votre fichier de contacts (Excel). Il est retenu dans ce navigateur.",
   "s6": "6. Relire et envoyer",
-  "tekstUitleg": "Modifiez librement l'objet et le texte : votre modification est retenue immédiatement dans ce navigateur. « ↩︎ original » rétablit le texte standard. Codes : {contact}, {entreprise}, {produits}, {expéditeur}, Cher/Chère et {singulier|pluriel}. La mise en forme (gras, couleur, listes, liens) est conservée avec 🎨 et 📎 ; avec ✉️ E-mail simple, cela devient du texte simple.",
   "talenFilter": "Seules les langues de vos clients collés sont affichées.",
   "nieuweTekst": "➕ Nouveau texte",
   "naamloos": "(nouveau texte)",
@@ -397,7 +400,8 @@ const TEKST = {
   "origineel": "↩︎ original",
   "tekstWeg": "🗑 Supprimer ce texte",
   "tekstWegVraag": "Supprimer ce texte (toutes les langues) ?",
-  "tekstNiet": "Ce navigateur ne peut pas l'enregistrer : votre modification ne dure que jusqu'à la fermeture de la page."
+  "tekstNiet": "Ce navigateur ne peut pas l'enregistrer : votre modification ne dure que jusqu'à la fermeture de la page.",
+  "codesRegel": "Codes : {contact}, {entreprise}, {produits}, {expéditeur}, Cher/Chère, {singulier|pluriel}"
  }
 };
 const TAAL_OPSLAG = "mailsjablonen_taal";   // gedeeld door beide pagina's
@@ -733,6 +737,7 @@ document.querySelector(".modus").addEventListener("click", e => {
 $("meerBijlagen").addEventListener("click", () => $("bestanden").click());
 function syncHand() {
   const eml = modus !== "tekst";
+  $("tekstsectie").classList.toggle("zonderOpmaak", !eml);   // opmaakknoppen alleen bij 🎨 en 📎
   $("handTekstBlok").hidden = eml;
   $("handOpmaakBlok").hidden = !eml;
   $("handOpmaakBlok").querySelector(".status").textContent = eml ? T("handModusEml") + " " + T("handUitleg") : T("handUitleg");
