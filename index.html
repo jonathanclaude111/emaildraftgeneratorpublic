@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="generator" content="mailsjablonen-automatisch">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-LzVSGMMD4WlvnnBW3Cuw7yb01sLUT/v/9VJq2clk6ew='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iQH/rVMVGGW28tflmoNX7uUebLMonPx2rSZCTCly4No=' 'sha256-QnXnatdBeqNXTUokeWrhM+Wp38YLNZRxxXTIH/E50tg=' 'sha256-laYRWhQydae1VzZUahrT2xfLVXhhrHFzgEAegcdvm5U=' 'sha256-SxCZZ4brafB94hq5SHF7gzLSFsrpVVQIXnt1PL5f/Yw='; style-src 'unsafe-inline'; img-src data: blob: https:; font-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Beveiliging: geen verbindingen, geen externe code, en alleen deze exacte scripts (vingerafdruk/hash) mogen draaien. Elke wijziging aan de code vraagt nieuwe hashes. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mailsjablonen</title>
@@ -553,11 +553,6 @@ function mooi(html) {
   w.querySelectorAll("p").forEach(e => { e.style.margin = "0"; });
   w.querySelectorAll("ul,ol").forEach(e => { e.style.margin = "0"; e.style.paddingLeft = "24px"; });
   return w.innerHTML;
-}
-/* Huidige stand onthouden. Geeft false terug als de browser niets mag bewaren. */
-function bewaarData() {
-  try { localStorage.setItem(OPSLAG, JSON.stringify(data)); return true; }
-  catch (err) { console.error("Onthouden mislukt:", err); return false; }
 }
 
 /* Opgeslagen contacten lezen. De oude vorm (sleutel "bestand") wordt ook herkend; oude teksten worden genegeerd. */
